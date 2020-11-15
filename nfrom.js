@@ -1,7 +1,12 @@
 /* Author: Nuno Aguiar */
 
 _from = function(anObject) {
-    var res = [], where = "", useCase = false, useOr = false, useNot = false;
+    if ($$(anObject).isMap()) {
+        anObject = Object.values(anObject);
+    }
+
+    _$(anObject).isArray().$_();
+    var res = anObject, where = "", useCase = false, useOr = false, useNot = false;
 
     var applyConditions = aOrig => {
         if ($$(aOrig).isFunction()) aOrig = aOrig();
@@ -177,7 +182,7 @@ _from = function(anObject) {
         at     : aParam => {
             _$(aParam, "index").isNumber().$_();
 
-            res = applyConditions(anObject);
+            res = applyConditions(res);
             return res[Number(aParam)];
         },
         min    : aKey => {
@@ -243,14 +248,59 @@ _from = function(anObject) {
 
             return sum;
         },
-        count  : () => { res = applyConditions(anObject); return res.length; },
-        first  : () => { res = applyConditions(anObject); return (res.length > 0 ? res[0] : void 0); },
-        last   : () => { res = applyConditions(anObject); return (res.length > 0 ? res[res.length-1] : void 0); },
-        any    : () => { res = applyConditions(anObject); return (res.length > 0); },
-        none   : () => { res = applyConditions(anObject); return (res.length == 0); },
-        reverse: () => { res = applyConditions(anObject); return res.reverse(); },
+        distinct: aKey => {
+            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            var vals = [];
+
+            code.select(r => {
+                var v = ($$(aKey).isDef() ? r[aKey] : r);
+                if (vals.indexOf(v) < 0) vals.push(v);
+            });
+
+            return vals;
+        },
+        group  : aKey => {
+            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            var vals = {};
+
+            code.select(r => {
+                var v = ($$(aKey).isDef() ? r[aKey] : r);
+                if (Object.keys(vals).indexOf(v) < 0) {
+                    vals[v] = [ r ];
+                } else {
+                    vals[v].push(r);
+                }
+            });
+
+            return vals;
+        },
+        each   : aFn => {
+            _$(aFn, "function").isFunction().$_();
+
+            code.select(aFn);
+
+            return code;
+        },
+        attach : (aKey, aValue) => {
+            _$(aKey, "key").$_();
+            _$(aValue, "value").$_(); 
+
+            res = applyConditions(res);
+
+            aKey   = vKey(aKey);
+            res = res.map(r => { r[aKey] = aValue; return r; });
+
+            return code;
+        },
+        all    : () => { res = applyConditions(res); return res.length == anObject.length; },
+        count  : () => { res = applyConditions(res); return res.length; },
+        first  : () => { res = applyConditions(res); return (res.length > 0 ? res[0] : void 0); },
+        last   : () => { res = applyConditions(res); return (res.length > 0 ? res[res.length-1] : void 0); },
+        any    : () => { res = applyConditions(res); return (res.length > 0); },
+        none   : () => { res = applyConditions(res); return (res.length == 0); },
+        reverse: () => { res = applyConditions(res); return res.reverse(); },
         select : aParam => {
-            res = applyConditions(anObject);
+            res = applyConditions(res);
             // no parameters
             if ($$(aParam).isUnDef()) {
                 return res;
