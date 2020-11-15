@@ -18,7 +18,6 @@ var nLinq = function(anObject) {
         if (where.length == 0) return aOrig;
 
         where = where.replace(/\;/g, " ");
-        print(where);
         var f = new Function("r", "return (" + where + ")");
         res = aOrig.filter(r => f(r));
         return res;
@@ -36,7 +35,7 @@ var nLinq = function(anObject) {
     // Auxiliary functions - verify the provided value
     var vValue = aValue => {
         if (!($$(aValue).isNumber() || $$(aValue).isBoolean())) { 
-            aValue = stringify(aValue, "");
+            aValue = JSON.stringify(aValue, void 0, "");
             aValue = (useCase ? aValue.toLowerCase() : aValue); 
         }
         return aValue;
