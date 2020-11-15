@@ -1,6 +1,7 @@
 /* Author: Nuno Aguiar */
 
-_from = function(anObject) {
+var nLinq = function(anObject) {
+    // Verify input
     if ($$(anObject).isMap()) {
         anObject = Object.values(anObject);
     }
@@ -8,6 +9,9 @@ _from = function(anObject) {
     _$(anObject).isArray().$_();
     var res = anObject, where = "", useCase = false, useOr = false, useNot = false;
 
+    // Auxiliary functions
+
+    // Auxiliary functions - apply query conditions
     var applyConditions = aOrig => {
         if ($$(aOrig).isFunction()) aOrig = aOrig();
 
@@ -20,6 +24,7 @@ _from = function(anObject) {
         return res;
     };
 
+    // Auxiliary functions - verify the provided key
     var vKey = aKey => {
         if ($$(aKey).isString() && aKey.replace(/^[^a-zA-Z_$]|[^\w$]/g, "") == aKey) {
             return (useCase ? aKey.toLowerCase() : aKey);
@@ -28,6 +33,7 @@ _from = function(anObject) {
         }
     };
 
+    // Auxiliary functions - verify the provided value
     var vValue = aValue => {
         if (!($$(aValue).isNumber() || $$(aValue).isBoolean())) { 
             aValue = stringify(aValue, "");
@@ -36,6 +42,7 @@ _from = function(anObject) {
         return aValue;
     };
 
+    // Auxiliary functions - given a key, a value, a query template app change the current query
     var applyWhere = (aKey, aValue, aTmpl, isOr, isTwoValues, aValue2) => {
         var isM;
         if (isTwoValues) {
@@ -59,6 +66,7 @@ _from = function(anObject) {
         applyWhereTmpl(aTmpl, isOr);
     };
 
+    // Auxiliary functions - append a sub-query to the current query 
     var applyWhereTmpl = (aTmpl, isOr) => {
         isOr = _$(isOr).default(useOr);
 
@@ -72,19 +80,22 @@ _from = function(anObject) {
         where += "(" + aTmpl + ")";
     };
 
+    // Main code
     var code = {
+        // Change default behaviour
         useCase      : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? true : false); return code; },
         ignoreCase   : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? false : true); return code; },
-
-        // WHEREs
-        where        : aTmpl => { applyWhereTmpl(aTmpl, false); return code; },
+        // TODO: Support remembering the previous key if none provided
         or           : () => { useOr = true; return code; },
         and          : () => { useOr = false; return code; },
         not          : () => { useNot = true; return code; },
         andNot       : () => { useOr = false; useNot = true; return code; },
         orNot        : () => { useOr = true; useNot = true; return code; },
 
-        // POSITIVE
+        // WHEREs
+        where        : aTmpl => { applyWhereTmpl(aTmpl, false); return code; },
+
+        // Main queries
         starts       : (aKey, aValue) => { if (useOr) { if (useNot) code.orNotStarts(aKey, aValue); else code.orStarts(aKey, aValue); } else { if (useNot) code.andNotStarts(aKey, aValue); else code.andStarts(aKey, aValue); } return code; },
         ends         : (aKey, aValue) => { if (useOr) { if (useNot) code.orNotEnds(aKey, aValue); else code.orEnds(aKey, aValue); } else { if (useNot) code.andNotEnds(aKey, aValue); else code.andEnds(aKey, aValue); } return code; },
         equals       : (aKey, aValue) => { if (useOr) { if (useNot) code.orNotEquals(aKey, aValue); else code.orEquals(aKey, aValue); } else { if (useNot) code.andNotEquals(aKey, aValue); else code.andEquals(aKey, aValue); } return code; },
@@ -100,6 +111,7 @@ _from = function(anObject) {
         betweenEquals: (aKey, aV1, aV2) => { if (useOr) { if (useNot) code.orNotBetweenEquals(aKey, aValue); else code.orBetweenEquals(aKey, aValue); } else { if (useNot) code.andNotBetweenEquals(aKey, aValue); else code.andBetweenEquals(aKey, aValue); } return code; },
         is           : (aKey) => { if (useOr) { if (useNot) code.orNotIs(aKey, aValue); else code.orIs(aKey, aValue); } else { if (useNot) code.andNotIs(aKey, aValue); else code.andIs(aKey, aValue); } return code; },
 
+        // Queries with and
         andStarts       : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).startsWith({v})", false); return code; },
         andEnds         : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).endsWith({v})", false); return code; },
         andEquals       : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} == {v}", false); return code; },
@@ -115,7 +127,7 @@ _from = function(anObject) {
         andBetweenEquals: (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} >= {v} && {k} <= {v2})", false, true, aV2); return code; },
         andIs           : (aKey) => { applyWhere(aKey, "", "{k} != null && {k}", false); return code; },
 
-        // NEGATIVE
+        // Queries with not
         notStarts       : (aKey, aValue) => { if (useOr) code.orNotStarts(aKey, aValue); else code.andNotStarts(aKey, aValue); return code; },
         notEnds         : (aKey, aValue) => { if (useOr) code.orNotEnds(aKey, aValue); else code.andNotEnds(aKey, aValue); return code; },
         notEquals       : (aKey, aValue) => { if (useOr) code.orNotEquals(aKey, aValue); else code.andNotEquals(aKey, aValue); return code; },
@@ -131,6 +143,7 @@ _from = function(anObject) {
         notBetweenEquals: (aKey, aV1, aV2) => { if (useOr) code.orNotBetweenEquals(aKey, aValue); else code.andNotBetweenEquals(aKey, aValue); return code; },
         notIs           : (aKey) => { if (useOr) code.orNotIs(aKey, aValue); else code.andNotIs(aKey, aValue); return code; },
 
+        // Queries with and & not
         andNotStarts       : (aKey, aValue) => { applyWhere(aKey, aValue, "!(String({k}).startsWith({v}))", false); return code; },
         andNotEnds         : (aKey, aValue) => { applyWhere(aKey, aValue, "!(String({k}).endsWith({v}))", false); return code; },
         andNotEquals       : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} != {v}", false); return code; },
@@ -146,7 +159,7 @@ _from = function(anObject) {
         andNotBetweenEquals: (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} <= {v} || {k} >= {v2})", false, true, aV2); return code; },
         andNotIs           : (aKey) => { applyWhere(aKey, "", "{k} == null || !({k})", false); return code; },
 
-        // OR
+        // Queries with or
         orStarts       : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).startsWith({v})", true); return code; },
         orEnds         : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).endsWith({v})", true); return code; },
         orEquals       : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} == {v}", true); return code; },
@@ -162,7 +175,7 @@ _from = function(anObject) {
         orBetweenEquals: (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} >= {v} && {k} <= {v2})", true, aV2); return code; },
         orIs           : (aKey) => { applyWhere(aKey, "", "{k} != null && {k}", true); return code; },
 
-        // OR NEGATIVE
+        // Queries with or and not
         orNotStarts       : (aKey, aValue) => { applyWhere(aKey, aValue, "!(String({k}).startsWith({v}))", true); return code; },
         orNotEnds         : (aKey, aValue) => { applyWhere(aKey, aValue, "!(String({k}).endsWith({v}))", true); return code; },
         orNotEquals       : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} != {v}", true); return code; },
@@ -179,12 +192,8 @@ _from = function(anObject) {
         orNotIs           : (aKey) => { applyWhere(aKey, "", "{k} == null || !({k})", true); return code; },
 
         // SELECTS
-        at     : aParam => {
-            _$(aParam, "index").isNumber().$_();
 
-            res = applyConditions(res);
-            return res[Number(aParam)];
-        },
+        // Providing immediate result
         min    : aKey => {
             aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
             var min;
@@ -274,6 +283,21 @@ _from = function(anObject) {
 
             return vals;
         },
+        at     : aParam => {
+            _$(aParam, "index").isNumber().$_();
+
+            res = applyConditions(res);
+            return res[Number(aParam)];
+        },
+        all    : () => { res = applyConditions(res); return res.length == anObject.length; },
+        count  : () => { res = applyConditions(res); return res.length; },
+        first  : () => { res = applyConditions(res); return (res.length > 0 ? res[0] : void 0); },
+        last   : () => { res = applyConditions(res); return (res.length > 0 ? res[res.length-1] : void 0); },
+        any    : () => { res = applyConditions(res); return (res.length > 0); },
+        none   : () => { res = applyConditions(res); return (res.length == 0); },
+        reverse: () => { res = applyConditions(res); return res.reverse(); },
+
+        // Applying to current result set
         each   : aFn => {
             _$(aFn, "function").isFunction().$_();
 
@@ -292,13 +316,33 @@ _from = function(anObject) {
 
             return code;
         },
-        all    : () => { res = applyConditions(res); return res.length == anObject.length; },
-        count  : () => { res = applyConditions(res); return res.length; },
-        first  : () => { res = applyConditions(res); return (res.length > 0 ? res[0] : void 0); },
-        last   : () => { res = applyConditions(res); return (res.length > 0 ? res[res.length-1] : void 0); },
-        any    : () => { res = applyConditions(res); return (res.length > 0); },
-        none   : () => { res = applyConditions(res); return (res.length == 0); },
-        reverse: () => { res = applyConditions(res); return res.reverse(); },
+        sort   : function() {
+            var ssort = "";
+
+            res = applyConditions(res);
+
+            for(var o = 0; o < arguments.length; o++) {
+                var k = arguments[o];
+                var rev = false;
+                if (k.startsWith("-")) {
+                    rev = true;
+                    k.substr(1, k.length -1);
+                }
+
+                if (ssort.length > 0) ssort += " || "; else ssort = "return ";
+                if (rev) {
+                    ssort += " b[\"" + k + "\"] - a[\"" + k + "\"] ";
+                } else {
+                    ssort += " a[\"" + k + "\"] - b[\"" + k + "\"] ";
+                }
+            }
+
+            res = res.sort(new Function("a", "b", ssort));
+
+            return code;
+        },
+
+        // Main selector
         select : aParam => {
             res = applyConditions(res);
             // no parameters
@@ -338,3 +382,5 @@ _from = function(anObject) {
 
     return code;
 };
+
+var _from = nLinq;

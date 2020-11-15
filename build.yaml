@@ -1,0 +1,51 @@
+# Author: Nuno Aguiar
+init:
+  paths:
+    src : src
+    dist: dist
+
+todo:
+- Clean dist
+- Build browser version
+- Build OpenAF version
+
+ojob:
+  opacks      :
+  - openaf: 20200523
+  catch       : logErr(exception);
+  logToConsole: true   # to change when finished
+
+jobs:
+# ----------------
+- name: Clean dist
+  exec: |
+    args.dist = _$(args.dist, "dist").default(args.init.paths.dist);
+
+    log("Deleting '" + args.dist + "'...");
+    io.rm(args.dist);
+    log("Recreating '" + args.dist + "'...");
+    io.mkdir(args.dist);
+
+# ---------------------------
+- name: Build browser version
+  exec: |
+    args.src = _$(args.src, "src").default(args.init.paths.src);
+    args.dist = _$(args.dist, "dist").default(args.init.paths.dist);
+
+    log("Joining nlinq.js with opeafafsigil.js...");
+    var nlinq = "// nlinq.js\n//\n\n" + io.readFileString(args.src + "/nlinq.js"); 
+    var sigil = "// openafsigil.js\n//\n\n" + io.readFileString(args.src + "/openafsigil.js");
+
+    log("Writing '" + args.dist + "/nlinq.js'...");
+    io.writeFileString(args.dist + "/nlinq.js", nlinq + "\n\n" + sigil);
+
+# ---------------------------
+- name: Build OpenAF version
+  exec: |
+    args.src = _$(args.src, "src").default(args.init.paths.src);
+    args.dist = _$(args.dist, "dist").default(args.init.paths.dist);
+
+    var nlinq = io.readFileString(args.src + "/nlinq.js"); 
+
+    log("Writing '" + args.dist + "/openafnlinq.js'...");
+    io.writeFileString(args.dist + "/openafnlinq.js", nlinq);

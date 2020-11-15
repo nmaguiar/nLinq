@@ -1,7 +1,6 @@
 /* Author: Nuno Aguiar */
 
-loadLib("nfrom.js");
-
+loadLib("nlinq.js");
 ow.loadTest();
 
 // SELECTOR tests
