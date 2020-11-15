@@ -40,3 +40,4 @@ This is not an exaustive list by just to provide a heads-up on what is still mis
 ### Functionality
 
 * Parameter arrays to apply functions over values.
+* Sub-map key reference (e.g. "names.firstName")
