@@ -15,6 +15,7 @@ todo:
 - Selector::Simple count selector
 - Selector::Simple reverse selector
 - Selector::Sub-map group selector
+- Selector::Sub-map boolean group selector 
 
 - Where::Sub-map group selector
 
@@ -223,3 +224,21 @@ jobs:
       var res = _from(global.data).sort("address.state", "-address.zip").first();
 
       ow.test.assert(res.address.zip, 99654, "Problema with sort by sub-maps.");
+
+# ----------------------------------------------
+- name: Selector::Sub-map boolean group selector 
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = global.data.map(r => {
+        var t = clone(r);
+        t.test = Boolean(t.address.zip % 2);
+        return t;
+      });
+
+      var o = _from(res).group("test");
+
+      ow.test.assert(o["true"].length + o["false"].length, global.data.length, "Problem with boolean group selector.");
