@@ -3,11 +3,13 @@ init:
   paths:
     src : src
     dist: dist
+    test: test
 
 todo:
 - Clean dist
 - Build browser version
 - Build OpenAF version
+- Test OpenAF version
 
 ojob:
   opacks      :
@@ -39,7 +41,7 @@ jobs:
     log("Writing '" + args.dist + "/nlinq.js'...");
     io.writeFileString(args.dist + "/nlinq.js", nlinq + "\n\n" + sigil);
 
-# ---------------------------
+# --------------------------
 - name: Build OpenAF version
   exec: |
     args.src = _$(args.src, "src").default(args.init.paths.src);
@@ -49,3 +51,11 @@ jobs:
 
     log("Writing '" + args.dist + "/openafnlinq.js'...");
     io.writeFileString(args.dist + "/openafnlinq.js", nlinq);
+
+# -------------------------
+- name: Test OpenAF version
+  deps: Build OpenAF version
+  exec: |
+    $sh("ojob " + args.init.paths.test + "/nlinq-test.yaml nlinq=" + args.init.paths.dist + "/openafnlinq.js test=" + args.init.paths.test)
+    .prefix("test")
+    .get();

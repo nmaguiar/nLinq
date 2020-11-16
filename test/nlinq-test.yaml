@@ -35,13 +35,15 @@ jobs:
 # ----------------
 - name: Load nLinq
   exec: |
-    load("../src/nlinq.js");
+    args.nlinq = _$(args.nlinq, "nlinq").default("../src/nlinq.js");
+    loadLib(args.nlinq);
 
 # ----------------------
 - name: Load sample data
   exec: |
-    global.data = io.readFileJSON("data.json");
-    global.data2 = io.listFiles(".").files;
+    args.test = _$(args.test).default(".");
+    global.data = io.readFileJSON(args.test + "/data.json");
+    global.data2 = io.listFiles(args.test + "/.").files;
 
 # -------------
 - name: Results
