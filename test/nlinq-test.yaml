@@ -1,0 +1,223 @@
+todo:
+- Load nLinq
+- Load sample data
+- Results
+
+- Selector::Simple result
+- Selector::Simple result function
+- Selector::Simple result function transform
+- Selector::Simple result map
+- Selector::Simple array min
+- Selector::Simple array max
+- Selector::Simple array sum
+- Selector::Simple array average
+- Selector::Simple at selector
+- Selector::Simple count selector
+- Selector::Simple reverse selector
+- Selector::Sub-map group selector
+
+- Where::Sub-map group selector
+
+- Sort::Sort by sub-maps
+
+include:
+- oJobTest.yaml
+
+ojob:
+  async : true
+  opacks:
+  - oJob-common
+  - openaf: 20200523
+  catch       : logErr(exception);
+  logToConsole: true 
+
+jobs:
+# ----------------
+- name: Load nLinq
+  exec: |
+    load("../src/nlinq.js");
+
+# ----------------------
+- name: Load sample data
+  exec: |
+    global.data = io.readFileJSON("data.json");
+    global.data2 = io.listFiles(".").files;
+
+# -------------
+- name: Results
+  from: oJob Test Results
+  type: shutdown
+  args:
+    quiet: true
+  exec: |
+    tprint("Tests PASSED: {{pass}}/{{count}}", args.results);
+    tprint("Tests FAILED: {{fail}}/{{count}}", args.results);
+    if (args.results.fail > 0) printErr("There are failed tests");
+    io.writeFileString("nlinq-test.md", ow.test.toMarkdown());
+
+# ------------------------------
+- name: Selector::Simple result
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data2).select();
+      ow.test.assert(global.data2.length, res.length, "Problem with the simple result test.");
+
+# ---------------------------------------
+- name: Selector::Simple result function
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data2).select(r => r);
+      ow.test.assert(global.data2.length, res.length, "Problem with the simple function test.");
+
+# -------------------------------------------------
+- name: Selector::Simple result function transform
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data2).select(r => {
+        if (r.isFile) return 1; else return 0;
+      });
+      ow.test.assert(global.data2.length, res.length, "Problem with the simple function transform test.");
+
+# ----------------------------------
+- name: Selector::Simple result map
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data2).select({ isFile: false });
+      ow.test.assert(Object.keys(res[0]).length, 1, "Problem with the simple map test test.");
+
+# ---------------------------------
+- name: Selector::Simple array min
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3];
+
+      var res = _from(ar).min();
+      ow.test.assert(res, 1, "Problem with simple array min.");
+
+# ---------------------------------
+- name: Selector::Simple array max
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3];
+
+      var res = _from(ar).max();
+      ow.test.assert(res, 3, "Problem with simple array max.");
+
+# ---------------------------------
+- name: Selector::Simple array sum
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3];
+
+      var res = _from(ar).sum();
+      ow.test.assert(res, 6, "Problem with simple array sum.");
+
+# -------------------------------------
+- name: Selector::Simple array average
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3];
+
+      var res = _from(ar).average();
+      ow.test.assert(res, 2, "Problem with simple array average.");
+
+# -----------------------------------
+- name: Selector::Simple at selector
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3];
+
+      ow.test.assert(_from(ar).at(0), 1, "Problem with simple at selector (1)");
+      ow.test.assert(_from(ar).at(1), 2, "Problem with simple at selector (2)");
+      ow.test.assert(_from(ar).at(2), 3, "Problem with simple at selector (3)");
+
+# --------------------------------------
+- name: Selector::Simple count selector
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3];
+
+      ow.test.assert(_from(ar).count(), 3, "Problem with simple count selector");
+
+# ----------------------------------------
+- name: Selector::Simple reverse selector
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |    
+      var ar = [1, 2, 3];
+
+      ow.test.assert(_from(ar).reverse()[0], 3, "Problem with simple reverse selector");
+
+# ---------------------------------------
+- name: Selector::Sub-map group selector
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data).group("address.state");
+
+      ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
+      ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
+
+# -----------------------------------
+- name: Where::Sub-map group selector
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data).ends("email", "yahoo.com").equals("address.zip", 7424);
+
+      ow.test.assert(res.count(), 1, "Problem with sub-map query count.");
+      ow.test.assert(res.first().phone, "2764614795", "Problem with sub-map query select.");
+
+# ----------------------------
+- name: Sort::Sort by sub-maps
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data).sort("address.state", "-address.zip").first();
+
+      ow.test.assert(res.address.zip, 99654, "Problema with sort by sub-maps.");

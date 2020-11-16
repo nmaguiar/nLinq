@@ -1,0 +1,36 @@
+# Author: Nuno Aguiar
+
+todo:
+- Generate data
+
+ojob:
+  opacks      :
+  - openaf: 20200523
+  - GenData
+  catch       : logErr(exception);
+  loadLibs    :
+  - genData.js
+  logToConsole: true   # to change when finished
+
+jobs:
+# -------------------
+- name: Generate data
+  exec: |
+    log("Generating data...");
+    var data = genData()
+               .loadList("names", "lists/clients/list_names.yaml")
+               .loadList("domains", "lists/clients/list_emaildomains.yaml")
+               .generate((g ,f) => {
+                 var res = {}; 
+
+                 res.name     = g.getFromList("names").name;
+                 res.username = f.genUsername(g, res.name);
+                 res.email    = f.genUsername(g, res.name) + "@" + g.getFromList("domains").domain;
+                 res.address  = f.genUSAddress(g);
+                 res.phone    = f.genPhone(g, "US", "mobile").phone;
+                 
+                 return res;
+               }, 1000)
+               .dump();
+
+    io.writeFileJSON("data.json", data);
