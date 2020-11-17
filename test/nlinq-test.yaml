@@ -16,16 +16,20 @@ todo:
 - Selector::Simple reverse selector
 - Selector::Sub-map group selector
 - Selector::Sub-map boolean group selector 
+- Selector::Simple limit selector
 
 - Where::Sub-map group selector
 
 - Sort::Sort by sub-maps
 
+- Stream::Stream with limit
+- Stream::Stream simple test
+
 include:
 - oJobTest.yaml
 
 ojob:
-  async : true
+  async : false
   opacks:
   - oJob-common
   - openaf: 20200523
@@ -176,6 +180,20 @@ jobs:
 
       ow.test.assert(_from(ar).count(), 3, "Problem with simple count selector");
 
+# -------------------------------------
+- name: Selector::Simple limit selector
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [1, 2, 3, 4, 5];
+
+      ow.test.assert(_from(ar).limit(3).count(), 3, "Problem with simple limit selector (1)");
+      ow.test.assert(_from(ar).limit(-2).count(), 2, "Problem with simple limit selector (2)");
+      ow.test.assert(_from(ar).limit(-1).at(0), 5, "Problem with simple limit selector (3)");
+      ow.test.assert(_from(ar).limit(1).at(0), 1, "Problem with simple limit selector (4)");
+
 # ----------------------------------------
 - name: Selector::Simple reverse selector
   deps: 
@@ -242,3 +260,28 @@ jobs:
       var o = _from(res).group("test");
 
       ow.test.assert(o["true"].length + o["false"].length, global.data.length, "Problem with boolean group selector.");
+
+# -------------------------------
+- name: Stream::Stream with limit
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [];
+      _from( Math.random ).limit(10).stream(r => ar.push(ar));
+
+      ow.test.assert(ar.length, 10, "Problem with stream with limit.");
+
+# --------------------------------
+- name: Stream::Stream simple test
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = [ 1, 2, 3, 4, 5], rs = [];
+      _from(() => { return ar.pop() }).stream(r => rs.push(r));
+
+      ow.test.assert(rs.length, 5, "Problem with stream (1)");
+      ow.test.assert(ar.length, 0, "Problem with stream (2)");
