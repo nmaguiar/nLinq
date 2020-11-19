@@ -58,11 +58,11 @@ var nLinq = function(anObject) {
     };
 
     // Auxiliary functions - verify the provided key
-    var vKey = aKey => {
+    var vKey = (aKey) => {
         if ($$(aKey).isString() && aKey.replace(/^[^a-zA-Z_$]|[^\w\[\]\.$]/g, "") == aKey) {
             return (useCase ? aKey.toLowerCase() : aKey);
         } else {
-            if ($$(aKey).isDef()) throw "'" + aKey + "' is not valid key."; else return void 0;
+            if ($$(aKey).isDef()) throw "'" + aKey + "' is not a valid key."; else return void 0;
         }
     };
 
@@ -77,7 +77,7 @@ var nLinq = function(anObject) {
 
     // Auxiliary functions - given a key, a value, a query template app change the current query
     var applyWhere = (aKey, aValue, aTmpl, isOr, isTwoValues, aValue2) => {
-        var isM;
+        var isM, useDot = true;
         if (isTwoValues) {
             isM = $$(aValue2).isDef();
             var origValue = aValue;
@@ -86,10 +86,18 @@ var nLinq = function(anObject) {
         } else {
             isM = $$(aValue).isDef();
             aValue = vValue(isM ? aValue : aKey);
-            aKey   = isM ? vKey(aKey) : void 0;
+            try {
+                aKey = isM ? vKey(aKey) : void 0;
+            } catch(e) {
+                if (String(e).indexOf("is not a valid key") > 0) {
+                    useDot = false;
+                } else {
+                    throw e;
+                }
+            }
         }
 
-        if (isM) aTmpl = aTmpl.replace(/{k}/g, "r." + aKey); else aTmpl = aTmpl.replace(/{k}/g, "r");
+        if (isM) aTmpl = aTmpl.replace(/{k}/g, (!useDot ? "$$$$(r).get(" + JSON.stringify(aKey) + ")" : "r." + aKey)); else aTmpl = aTmpl.replace(/{k}/g, "r");
         if ($$(aValue2).isDef()) {
             aValue2 = vValue(aValue2);
             aTmpl = aTmpl.replace(/{v}/g, aValue).replace(/{v2}/g, aValue2);
@@ -211,7 +219,7 @@ var nLinq = function(anObject) {
         andGreaterEquals: (aKey, aValue) => { applyWhere(aKey, aValue, "{k} >= {v}", false); return code; },
         andLessEquals   : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} <= {v}", false); return code; },
         andContains     : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).indexOf({v}) >= 0", false); return code; },
-        andEmpty        : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).length == 0", false); return code; },
+        andEmpty        : (aKey, aValue) => { applyWhere(aKey, "", "($$({k}).isUnDef() || String({k}).length == 0)", false); return code; },
         andMatch        : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).match({v})", false); return code; },
         andType         : (aKey, aValue) => { applyWhere(aKey, aValue, "typeof {k} == {v}", false); return code; },
         andBetween      : (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} > {v} && {k} < {v2})", false, true, aV2); return code; },
@@ -243,7 +251,7 @@ var nLinq = function(anObject) {
         andNotGreaterEquals: (aKey, aValue) => { applyWhere(aKey, aValue, "{k} < {v}", false); return code; },
         andNotLessEquals   : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} > {v}", false); return code; },
         andNotContains     : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).indexOf({v}) < 0", false); return code; },
-        andNotEmpty        : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).length != 0", false); return code; },
+        andNotEmpty        : (aKey, aValue) => { applyWhere(aKey, "", "($$({k}).isDef() && String({k}).length != 0)", false); return code; },
         andNotMatch        : (aKey, aValue) => { applyWhere(aKey, aValue, "!(String({k}).match({v}))", false); return code; },
         andNotType         : (aKey, aValue) => { applyWhere(aKey, aValue, "typeof {k} != {v}", false); return code; },
         andNotBetween      : (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} < {v} || {k} > {v2})", false, true, aV2); return code; },
@@ -259,7 +267,7 @@ var nLinq = function(anObject) {
         orGreaterEquals: (aKey, aValue) => { applyWhere(aKey, aValue, "{k} >= {v}", true); return code; },
         orLessEquals   : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} <= {v}", true); return code; },
         orContains     : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).indexOf({v}) >= 0", true); return code; },
-        orEmpty        : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).length == 0", true); return code; },
+        orEmpty        : (aKey, aValue) => { applyWhere(aKey, "", "($$({k}).isUnDef() || String({k}).length == 0)", true); return code; },
         orMatch        : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).match({v})", true); return code; },
         orType         : (aKey, aValue) => { applyWhere(aKey, aValue, "typeof {k} == {v}", true); return code; },
         orBetween      : (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} > {v} && {k} < {v2})", true, aV2); return code; },
@@ -275,7 +283,7 @@ var nLinq = function(anObject) {
         orNotGreaterEquals: (aKey, aValue) => { applyWhere(aKey, aValue, "{k} < {v}", true); return code; },
         orNotLessEquals   : (aKey, aValue) => { applyWhere(aKey, aValue, "{k} > {v}", true); return code; },
         orNotContains     : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).indexOf({v}) < 0", true); return code; },
-        orNotEmpty        : (aKey, aValue) => { applyWhere(aKey, aValue, "String({k}).length != 0", true); return code; },
+        orNotEmpty        : (aKey, aValue) => { applyWhere(aKey, "", "($$({k}).isDef() && String({k}).length != 0)", true); return code; },
         orNotMatch        : (aKey, aValue) => { applyWhere(aKey, aValue, "!(String({k}).match({v}))", true); return code; },
         orNotType         : (aKey, aValue) => { applyWhere(aKey, aValue, "typeof {k} != {v}", true); return code; },
         orNotBetween      : (aKey, aV1, aV2) => { applyWhere(aKey, aV1, "({k} < {v} || {k} > {v2})", false, true, aV2); return code; },
@@ -286,7 +294,7 @@ var nLinq = function(anObject) {
 
         // Providing immediate result
         min    : aKey => {
-            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            aKey = _$(aKey).isString().default(void 0);
             var min;
 
             code.select(r => {
@@ -304,7 +312,7 @@ var nLinq = function(anObject) {
             return min;
         },
         max    : aKey => {
-            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            aKey = _$(aKey).isString().default(void 0);
             var max;
 
             code.select(r => {
@@ -322,7 +330,7 @@ var nLinq = function(anObject) {
             return max;
         },
         average: aKey => {
-            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            aKey = _$(aKey).isString().default(void 0);
             var sum = 0, c = 0;
 
             code.select(r => {
@@ -336,7 +344,7 @@ var nLinq = function(anObject) {
             return (c > 0 ? sum / c : void 0);
         },
         sum: aKey => {
-            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            aKey = _$(aKey).isString().default(void 0);
             var sum = 0;
 
             code.select(r => {
@@ -349,7 +357,7 @@ var nLinq = function(anObject) {
             return sum;
         },
         distinct: aKey => {
-            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            aKey = _$(aKey).isString().default(void 0);
             var vals = [];
 
             code.select(r => {
@@ -360,7 +368,7 @@ var nLinq = function(anObject) {
             return vals;
         },
         group  : aKey => {
-            aKey = ($$(aKey).isDef() ? vKey(aKey) : void 0);
+            aKey = _$(aKey).isString().default(void 0);
             var vals = {};
 
             code.select(r => {
@@ -403,7 +411,7 @@ var nLinq = function(anObject) {
 
             res = applyConditions(res);
 
-            aKey = vKey(aKey);
+            //aKey = vKey(aKey);
             if (isFunction(aValue)) {
                 res = res.map(r => { $$(r).set(aKey, aValue(r)); return r; });
             } else {
