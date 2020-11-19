@@ -7,7 +7,7 @@ var nLinq = function(anObject) {
     }
 
     //_$(anObject).isArray().$_();
-    var res = anObject, where = "", useCase = false, useOr = false, useNot = false, alimit = 0, askip = 0, negative = false;
+    var res = anObject, where = "", useCase = false, useOr = false, useNot = false, alimit = 0, askip = 0, negative = false, whereFn = [];
 
     // Auxiliary functions
 
@@ -35,21 +35,21 @@ var nLinq = function(anObject) {
         if (isFunction(aFunc)) {
             f = aFunc;
         } else {
-            f = new Function("r", "return (" + where + ")");
+            f = new Function("r", "whereFn", "return (" + where + ")");
         }
         if (askip != 0) {
             res = aOrig.slice(askip);
         }
         if (alimit != 0) {
             if (negative) 
-                res = aOrig.slice(alimit < 0 ? alimit : 0, alimit > 0 ? alimit : void 0).filter(r => !f(r));
+                res = aOrig.slice(alimit < 0 ? alimit : 0, alimit > 0 ? alimit : void 0).filter(r => !f(r, whereFn));
             else 
-                res = aOrig.slice(alimit < 0 ? alimit : 0, alimit > 0 ? alimit : void 0).filter(r => f(r));
+                res = aOrig.slice(alimit < 0 ? alimit : 0, alimit > 0 ? alimit : void 0).filter(r => f(r, whereFn));
         } else {
             if (negative)
-                res = aOrig.filter(r => !f(r));
+                res = aOrig.filter(r => !f(r, whereFn));
             else
-                res = aOrig.filter(r => f(r));
+                res = aOrig.filter(r => f(r, whereFn));
         }
         return res;
     };
@@ -127,6 +127,36 @@ var nLinq = function(anObject) {
 
         // WHEREs
         setWhere     : aTmpl => { applyWhereTmpl(aTmpl, false); return code; },
+        where        : aFn   => { if (useOr) { if (useNot) code.orNotWhere(aFn); else code.orWhere(aFn); } else { if (useNot) code.andNotWhere(aFn); else code.andWhere(aFn); } return code; },
+        orWhere      : aFn   => {
+            _$(aFn, "fn").isFunction().$_();
+
+            whereFn.push(aFn);
+            applyWhereTmpl("whereFn[" + (whereFn.length-1) + "](r)", true);
+            return code;
+        },
+        andWhere     : aFn   => {
+            _$(aFn, "fn").isFunction().$_();
+
+            whereFn.push(aFn);
+            applyWhereTmpl("whereFn[" + (whereFn.length-1) + "](r)", false);
+            return code;
+        },
+        notWhere     : aFn   => { if (useOr) code.orNotWhere(aFn); else code.andNotWhere(aFn); return code; },
+        andNotWhere  : aFn   => {
+            _$(aFn, "fn").isFunction().$_();
+
+            whereFn.push(aFn);
+            applyWhereTmpl("!whereFn[" + (whereFn.length-1) + "](r)", false);
+            return code;
+        },
+        orNotWhere   : aFn   => {
+            _$(aFn, "fn").isFunction().$_();
+
+            whereFn.push(aFn);
+            applyWhereTmpl("!whereFn[" + (whereFn.length-1) + "](r)", true);
+            return code;
+        },
 
         // Main queries
         starts       : (aKey, aValue) => { if (useOr) { if (useNot) code.orNotStarts(aKey, aValue); else code.orStarts(aKey, aValue); } else { if (useNot) code.andNotStarts(aKey, aValue); else code.andStarts(aKey, aValue); } return code; },
@@ -345,8 +375,12 @@ var nLinq = function(anObject) {
 
             res = applyConditions(res);
 
-            aKey   = vKey(aKey);
-            res = res.map(r => { $$(r).set(aKey, aValue); return r; });
+            aKey = vKey(aKey);
+            if (isFunction(aValue)) {
+                res = res.map(r => { $$(r).set(aKey, aValue(r)); return r; });
+            } else {
+                res = res.map(r => { $$(r).set(aKey, aValue); return r; });
+            }
 
             return code;
         },
@@ -471,7 +505,8 @@ var nLinq = function(anObject) {
                 res = (isFunction(anObject) ? anObject() : anObject);
                 return r;
             };
-        }
+        },
+        /* --extend here-- */ 
     };
 
     return code;

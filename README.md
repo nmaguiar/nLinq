@@ -29,14 +29,18 @@ This is not an exaustive list by just to provide a heads-up on what is still mis
 
 ### Methods
 
-* attach
-* except
-* intersect
-* union
-* skipWhile
-* takeWhile
-* selectMany
+* except(array)
+* intersect(array)
+* union(array)
+* skipWhile(fn)
+* takeWhile(fn)
 
 ### Functionality
 
 * Parameter arrays to apply functions over values.
+
+## To be implemented extra
+
+### Methods
+
+* merge(array)
