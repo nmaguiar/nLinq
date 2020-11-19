@@ -33,7 +33,7 @@ jobs:
   exec: |
     args.src = _$(args.src, "src").default(args.init.paths.src);
     args.dist = _$(args.dist, "dist").default(args.init.paths.dist);
-
+ 
     log("Joining nlinq.js with opeafafsigil.js...");
     var nlinq = "// nlinq.js\n//\n\n" + io.readFileString(args.src + "/nlinq.js"); 
     var sigil = "// openafsigil.js\n//\n\n" + io.readFileString(args.src + "/openafsigil.js");
@@ -48,6 +48,11 @@ jobs:
     args.dist = _$(args.dist, "dist").default(args.init.paths.dist);
 
     var nlinq = io.readFileString(args.src + "/nlinq.js"); 
+    var extra = io.readFileString(args.src + "/openafnlinq.js");
+    extra = extra.split("\n").map((line, i) => {
+      if (i > 0) return "\t\t" + line; else return line;
+    }).join("\n");
+    nlinq = nlinq.replace("/* --extend here-- */", extra);
 
     log("Writing '" + args.dist + "/openafnlinq.js'...");
     io.writeFileString(args.dist + "/openafnlinq.js", nlinq);

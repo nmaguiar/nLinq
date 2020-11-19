@@ -46,7 +46,7 @@ jobs:
 # ----------------
 - name: Load nLinq
   exec: |
-    args.nlinq = _$(args.nlinq, "nlinq").default("../src/nlinq.js");
+    args.nlinq = _$(args.nlinq, "nlinq").default("../dist/openafnlinq.js");
     loadLib(args.nlinq);
 
 # ----------------------

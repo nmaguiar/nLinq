@@ -115,6 +115,31 @@ var nLinq = function(anObject) {
 
     // Main code
     var code = {
+        _setState    : aMap => {
+            _$(aMap, "map").isMap().$_();
+            where   = aMap.where;
+            useCase = aMap.useCase;
+            useOr   = aMap.useOr;
+            useNot  = aMap.useNot;
+            alimit  = aMap.alimit;
+            askip   = aMap.askip;
+            negative = aMap.negative;
+            whereFn  = aMap.whereFn;
+
+            return code;
+        },
+        _getState    : () => {
+            return {
+                where: where,
+                useCase: useCase,
+                useOr: useOr,
+                useNot: useNot,
+                alimit: alimit,
+                askip: askip,
+                negative: negative,
+                whereFn: whereFn
+            };
+        },
         // Change default behaviour
         useCase      : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? true : false); return code; },
         ignoreCase   : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? false : true); return code; },
@@ -342,7 +367,7 @@ var nLinq = function(anObject) {
                 var v = ($$(aKey).isDef() ? $$(r).get(aKey) : r);
                 if ($$(v).isBoolean()) v = String(v);
                 if (Object.keys(vals).indexOf(v) < 0) {
-                    vals[v] = [ r ];
+                    vals[v] = [r];
                 } else {
                     vals[v].push(r);
                 }
@@ -509,7 +534,7 @@ var nLinq = function(anObject) {
                 return r;
             };
         },
-        /* --extend here-- */ 
+        /* --extend here-- */
     };
 
     return code;
