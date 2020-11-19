@@ -29,15 +29,14 @@ This is not an exaustive list by just to provide a heads-up on what is still mis
 
 ### Methods
 
-* assign
-* define
-* join
-* removed
-* skip
-* skipTake
-* take
+* attach
+* except
+* intersect
+* union
+* skipWhile
+* takeWhile
+* selectMany
 
 ### Functionality
 
 * Parameter arrays to apply functions over values.
-* Sub-map key reference (e.g. "names.firstName")

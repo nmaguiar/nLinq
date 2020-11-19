@@ -17,8 +17,14 @@ todo:
 - Selector::Sub-map group selector
 - Selector::Sub-map boolean group selector 
 - Selector::Simple limit selector
+- Selector::All
+- Selector::Last
+- Selector::Assign
+- Selector::SkipTake
+- Selector::Join
 
 - Where::Sub-map group selector
+- Where::Removed
 
 - Sort::Sort by sub-maps
 
@@ -217,6 +223,89 @@ jobs:
 
       ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
       ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
+
+# -------------------
+- name: Selector::All
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert(_from( [1, 2, 3, 4, 5] ).greater(0).all(), true, "Problem with all (1)");
+      ow.test.assert(_from( [1, 2, 3, 4, 5] ).less(0).all(), false, "Problem with all (2)");
+
+# --------------------
+- name: Selector::Last
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert(_from( [1, 2, 3, 4, 5] ).greater(0).last(), 5, "Problem with last (1)");
+      ow.test.assert(_from( [1, 2, 3, 4, 5] ).less(6).last(), 5, "Problem with last (2)");
+
+# ----------------------
+- name: Selector::Assign
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from(global.data)
+      .assign([{ state: "NY" }], "extra", "address.state", "state", { extra: { state: "" } })
+      .first();
+
+      ow.test.assert(res.extra.state, "NY", "Problem with assign.");
+
+# --------------------
+- name: Selector::Skip
+  deps:
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert(_from([1,2,3,4,5]).skip(4).count(), 1, "Problem with skip.");
+
+# --------------------
+- name: Selector::Take
+  deps:
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert(_from([1,2,3,4,5]).take(4).count(), 4, "Problem with take.");
+
+# ------------------------
+- name: Selector::SkipTake
+  deps:
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert(_from([1,2,3,4,5]).skipTake(3, 2).select(), [4, 5], "Problem with skipTake.");
+
+# --------------------
+- name: Selector::Join
+  deps:
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var res = _from([{ id: 1, t: 1}, {id: 2, t: 2}, {id: 3, t: 1}, {id: 4, t: 2 }])
+      .join([{t: 1, type: "ACTIVE"}, { t: 2, type: "INACTIVE" }], "type", "t", "t")
+      .select(r => { r.type = r.type[0].type; return r });
+
+      ow.test.assert(res[0].type, "ACTIVE", "Problem with join.");
+
+# --------------------
+- name: Where::Removed
+  deps:
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert(_from([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
 
 # -----------------------------------
 - name: Where::Sub-map group selector

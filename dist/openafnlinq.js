@@ -21,7 +21,7 @@ var nLinq = function(anObject) {
             if (negative) return [];
 
             if (askip != 0) {
-                return aOrig.slice(aksip);
+                aOrig = aOrig.slice(askip);
             }
             if (alimit != 0) {
                 return aOrig.slice(alimit < 0 ? alimit : 0, alimit > 0 ? alimit : void 0);
@@ -38,7 +38,7 @@ var nLinq = function(anObject) {
             f = new Function("r", "return (" + where + ")");
         }
         if (askip != 0) {
-            res = aOrig.slice(aksip);
+            res = aOrig.slice(askip);
         }
         if (alimit != 0) {
             if (negative) 
@@ -384,14 +384,14 @@ var nLinq = function(anObject) {
         assign: (aSource, aAlias, aPK, aFK, aFallback) => {
             res = applyConditions(res);
             res.map(r => {
-                r[aAlias] = nLinq(aSource).equals(aFK, r[aPK]).first(aFallback);
+                r[aAlias] = nLinq(aSource).equals(aFK, $$(r).get(aPK)).first(aFallback);
             });
             return code;
         },
         join: (aSource, aAlias, aPK, aFK) => {
             res = applyConditions(res);
             res.map(r => {
-                r[aAlias] = nLinq(aSource).equals(aFK, r[aPK]).select();
+                r[aAlias] = nLinq(aSource).equals(aFK, $$(r).get(aPK)).select();
             });
             return code;
         },
@@ -402,9 +402,13 @@ var nLinq = function(anObject) {
             return code;
         },
         take: aNum => {
+            _$(aNum).isNumber().$_();
+
             return code.limit(aNum);
         },
         skipTake: (aSkip, aTake) => {
+            _$(aSkip).isNumber().$_();
+            
             return code.skip(aSkip).take(aTake);
         },
 
