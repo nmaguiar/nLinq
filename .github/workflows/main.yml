@@ -45,3 +45,8 @@ jobs:
         with:
           name: openafnlinq.js
           path: dist/openafnlinq.js
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: nlinq-test.md
+          path: dist/nlinq-test.md
