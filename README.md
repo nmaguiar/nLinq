@@ -1,5 +1,7 @@
 # nLinq
 
+![Build](https://github.com/nmaguiar/nLinq/workflows/Build/badge.svg)
+
 Aims to be a replacement to the old [jLinq](https://github.com/hugoware/jLinq) providing most of the functionality hopefully faster than the original.
 
 The aim is provide JavaScript abstraction over different ways of "querying" arrays of maps/objects.
