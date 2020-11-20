@@ -25,6 +25,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Download openaf
+        run : |
+          wget https://openaf.io/unix64/nightly/install.sh | sh
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
