@@ -61,6 +61,14 @@ jobs:
 - name: Test OpenAF version
   deps: Build OpenAF version
   exec: |
+    // Run tests
     $sh(getOpenAFPath() + "/ojob " + args.init.paths.test + "/nlinq-test.yaml nlinq=" + args.init.paths.dist + "/openafnlinq.js test=" + args.init.paths.test)
     .prefix("test")
     .get();
+
+    // Check results
+    var tests = io.readFileJSON("nlinq-test.json");
+    if (tests.fail > 0) {
+      tlogErr("There were {{fail}} tests in {{count}}.", tests)
+      exit(-1);
+    }

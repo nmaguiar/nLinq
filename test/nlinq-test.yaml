@@ -67,6 +67,7 @@ jobs:
     tprint("Tests FAILED: {{fail}}/{{count}}", args.results);
     if (args.results.fail > 0) printErr("There are failed tests");
     io.writeFileString("nlinq-test.md", ow.test.toMarkdown());
+    io.writeFileJSON("nlinq-test.json", args.results);
 
 # ------------------------------
 - name: Selector::Simple result
