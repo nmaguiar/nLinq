@@ -25,6 +25,7 @@ todo:
 
 - Where::Sub-map group selector
 - Where::Removed
+- Where::Main constraints
 
 - Sort::Sort by sub-maps
 
@@ -298,6 +299,31 @@ jobs:
       .select(r => { r.type = r.type[0].type; return r });
 
       ow.test.assert(res[0].type, "ACTIVE", "Problem with join.");
+
+# -----------------------------
+- name: Where::Main constraints
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+        ow.test.assert( _from(global.data).starts("name", "Finnegan").count(), 1, "Problem with starts.");
+        ow.test.assert( _from(global.data).ends("name", "Taylor").count(), 1, "Problem with ends.");
+        ow.test.assert( _from(global.data).equals("email", "angeline.novak@icloud.com").count(), 1, "Problem with equals.");
+        ow.test.assert( _from(global.data).greater("address.zip", 11704).count(), 795, "Problem with greater.");
+        ow.test.assert( _from(global.data).less("address.zip", 11704).count(), 203, "Problem with less.");
+        ow.test.assert( _from(global.data).greaterEquals("address.zip", 11704).count(), 797, "Problem with greaterEquals.");
+        ow.test.assert( _from(global.data).lessEquals("address.zip", 11704).count(), 205, "Problem with lessEquals.");
+        ow.test.assert( _from(global.data).contains("email", "@icloud.com").count(), 74, "Problem with contains.");
+        ow.test.assert( _from(global.data).empty("address.zone").count(), 1000, "Problem with empty (1).");
+        ow.test.assert( _from(global.data).empty("address.zip").count(), 0, "Problem with empty (2).");
+        ow.test.assert( _from(global.data).match("email", "\@icloud\.com$").count(), 74, "Problem with match.");
+        ow.test.assert( _from(global.data).type("address.type", "string").count(), 0, "Problem with type (1).");
+        ow.test.assert( _from(global.data).type("address.address", "string").count(), 1000, "Problem with type (2).");
+        ow.test.assert( _from(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
+        ow.test.assert( _from(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
+        ow.test.assert( _from(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
 
 # --------------------
 - name: Where::Removed
