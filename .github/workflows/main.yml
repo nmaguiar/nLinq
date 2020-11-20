@@ -35,7 +35,13 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE && ./ojob build.yaml
           
+      # Upload artifacts
       - uses: actions/upload-artifact@v2
         with:
-          name: dist
-          path: dist
+          name: nlinq.js
+          path: dist/nlinq.js
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: openafnlinq.js
+          path: dist/openafnlinq.js
