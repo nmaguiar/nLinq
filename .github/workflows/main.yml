@@ -27,7 +27,8 @@ jobs:
 
       - name: Download openaf
         run : |
-          wget https://openaf.io/unix64/nightly/install.sh | sh
+          wget https://openaf.io/unix64/nightly/install.sh
+          sh install.sh
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
