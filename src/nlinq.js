@@ -1,17 +1,23 @@
 /* Author: Nuno Aguiar */
 
+var nLinq_USE_CASE = false;
 var nLinq = function(anObject) {
     // Verify input
     if ($$(anObject).isMap()) {
-        anObject = Object.values(anObject);
+        anObject = Object.keys(anObject).map(k => {
+            anObject[k]._key = k;
+            return anObject[k];
+        });
     }
 
     //_$(anObject).isArray().$_();
-    var res = anObject, where = "", useCase = false, useOr = false, useNot = false, alimit = 0, askip = 0, negative = false, whereFn = [];
+    var res = anObject, where = "", useCase = nLinq_USE_CASE, useOr = false, useNot = false, alimit = 0, askip = 0, negative = false, whereFn = [];
 
     // Auxiliary functions
 
     var aSortMap = function(aMap) {
+        if (!$$(aMap).isMap()) return aMap;
+
         var rrr = {}, ks = Object.keys(aMap).sort();
         ks.forEach(k => {
             rrr[k] = ($$(aMap[k]).isMap() ? aSortMap(aMap[k]) : aMap[k]);
@@ -419,14 +425,14 @@ var nLinq = function(anObject) {
 
         // Applying to current result set
         each   : aFn => {
-            _$(aFn, "function").isFunction().$_();
+            _$(aFn, "each function").isFunction().$_();
 
             code.select(aFn);
 
             return code;
         },
         intersect: (aA2) => {
-            _$(aA2, "array").isArray().$_();
+            _$(aA2, "intersect param").isArray().$_();
 
             res = applyConditions(res);
             res = aIntersection(res, aA2);
@@ -434,7 +440,7 @@ var nLinq = function(anObject) {
             return code;
         },
         except: (aA2) => {
-            _$(aA2, "array").isArray().$_();
+            _$(aA2, "except param").isArray().$_();
 
             res = applyConditions(res);
             res = aException(res, aA2);
@@ -442,7 +448,7 @@ var nLinq = function(anObject) {
             return code;
         },
         union: (aA2) => {
-            _$(aA2, "array").isArray().$_();
+            _$(aA2, "union param").isArray().$_();
 
             res = applyConditions(res);
             res = aUnion(res, aA2);
@@ -592,4 +598,4 @@ var nLinq = function(anObject) {
     return code;
 };
 
-var _from = nLinq;
+var $from = nLinq;

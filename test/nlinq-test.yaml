@@ -28,6 +28,9 @@ todo:
 - Where::Main constraints
 
 - Sort::Sort by sub-maps
+- Join::Simple join
+- Intersect::Simple intersect
+- Except::Simple except
 
 - Stream::Stream with limit
 - Stream::Stream simple test
@@ -78,7 +81,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data2).select();
+      var res = $from(global.data2).select();
       ow.test.assert(global.data2.length, res.length, "Problem with the simple result test.");
 
 # ---------------------------------------
@@ -89,7 +92,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data2).select(r => r);
+      var res = $from(global.data2).select(r => r);
       ow.test.assert(global.data2.length, res.length, "Problem with the simple function test.");
 
 # -------------------------------------------------
@@ -100,7 +103,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data2).select(r => {
+      var res = $from(global.data2).select(r => {
         if (r.isFile) return 1; else return 0;
       });
       ow.test.assert(global.data2.length, res.length, "Problem with the simple function transform test.");
@@ -113,7 +116,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data2).select({ isFile: false });
+      var res = $from(global.data2).select({ isFile: false });
       ow.test.assert(Object.keys(res[0]).length, 1, "Problem with the simple map test test.");
 
 # ---------------------------------
@@ -125,7 +128,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = _from(ar).min();
+      var res = $from(ar).min();
       ow.test.assert(res, 1, "Problem with simple array min.");
 
 # ---------------------------------
@@ -137,7 +140,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = _from(ar).max();
+      var res = $from(ar).max();
       ow.test.assert(res, 3, "Problem with simple array max.");
 
 # ---------------------------------
@@ -149,7 +152,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = _from(ar).sum();
+      var res = $from(ar).sum();
       ow.test.assert(res, 6, "Problem with simple array sum.");
 
 # -------------------------------------
@@ -161,7 +164,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = _from(ar).average();
+      var res = $from(ar).average();
       ow.test.assert(res, 2, "Problem with simple array average.");
 
 # -----------------------------------
@@ -173,9 +176,9 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      ow.test.assert(_from(ar).at(0), 1, "Problem with simple at selector (1)");
-      ow.test.assert(_from(ar).at(1), 2, "Problem with simple at selector (2)");
-      ow.test.assert(_from(ar).at(2), 3, "Problem with simple at selector (3)");
+      ow.test.assert($from(ar).at(0), 1, "Problem with simple at selector (1)");
+      ow.test.assert($from(ar).at(1), 2, "Problem with simple at selector (2)");
+      ow.test.assert($from(ar).at(2), 3, "Problem with simple at selector (3)");
 
 # --------------------------------------
 - name: Selector::Simple count selector
@@ -186,7 +189,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      ow.test.assert(_from(ar).count(), 3, "Problem with simple count selector");
+      ow.test.assert($from(ar).count(), 3, "Problem with simple count selector");
 
 # -------------------------------------
 - name: Selector::Simple limit selector
@@ -197,10 +200,10 @@ jobs:
     func: |
       var ar = [1, 2, 3, 4, 5];
 
-      ow.test.assert(_from(ar).limit(3).count(), 3, "Problem with simple limit selector (1)");
-      ow.test.assert(_from(ar).limit(-2).count(), 2, "Problem with simple limit selector (2)");
-      ow.test.assert(_from(ar).limit(-1).at(0), 5, "Problem with simple limit selector (3)");
-      ow.test.assert(_from(ar).limit(1).at(0), 1, "Problem with simple limit selector (4)");
+      ow.test.assert($from(ar).limit(3).count(), 3, "Problem with simple limit selector (1)");
+      ow.test.assert($from(ar).limit(-2).count(), 2, "Problem with simple limit selector (2)");
+      ow.test.assert($from(ar).limit(-1).at(0), 5, "Problem with simple limit selector (3)");
+      ow.test.assert($from(ar).limit(1).at(0), 1, "Problem with simple limit selector (4)");
 
 # ----------------------------------------
 - name: Selector::Simple reverse selector
@@ -211,7 +214,7 @@ jobs:
     func: |    
       var ar = [1, 2, 3];
 
-      ow.test.assert(_from(ar).reverse()[0], 3, "Problem with simple reverse selector");
+      ow.test.assert($from(ar).reverse()[0], 3, "Problem with simple reverse selector");
 
 # ---------------------------------------
 - name: Selector::Sub-map group selector
@@ -221,7 +224,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data).group("address.state");
+      var res = $from(global.data).group("address.state");
 
       ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
       ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
@@ -233,8 +236,8 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert(_from( [1, 2, 3, 4, 5] ).greater(0).all(), true, "Problem with all (1)");
-      ow.test.assert(_from( [1, 2, 3, 4, 5] ).less(0).all(), false, "Problem with all (2)");
+      ow.test.assert($from( [1, 2, 3, 4, 5] ).greater(0).all(), true, "Problem with all (1)");
+      ow.test.assert($from( [1, 2, 3, 4, 5] ).less(0).all(), false, "Problem with all (2)");
 
 # --------------------
 - name: Selector::Last
@@ -243,8 +246,8 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert(_from( [1, 2, 3, 4, 5] ).greater(0).last(), 5, "Problem with last (1)");
-      ow.test.assert(_from( [1, 2, 3, 4, 5] ).less(6).last(), 5, "Problem with last (2)");
+      ow.test.assert($from( [1, 2, 3, 4, 5] ).greater(0).last(), 5, "Problem with last (1)");
+      ow.test.assert($from( [1, 2, 3, 4, 5] ).less(6).last(), 5, "Problem with last (2)");
 
 # ----------------------
 - name: Selector::Assign
@@ -254,7 +257,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data)
+      var res = $from(global.data)
       .assign([{ state: "NY" }], "extra", "address.state", "state", { extra: { state: "" } })
       .first();
 
@@ -267,7 +270,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert(_from([1,2,3,4,5]).skip(4).count(), 1, "Problem with skip.");
+      ow.test.assert($from([1,2,3,4,5]).skip(4).count(), 1, "Problem with skip.");
 
 # --------------------
 - name: Selector::Take
@@ -276,7 +279,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert(_from([1,2,3,4,5]).take(4).count(), 4, "Problem with take.");
+      ow.test.assert($from([1,2,3,4,5]).take(4).count(), 4, "Problem with take.");
 
 # ------------------------
 - name: Selector::SkipTake
@@ -285,7 +288,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert(_from([1,2,3,4,5]).skipTake(3, 2).select(), [4, 5], "Problem with skipTake.");
+      ow.test.assert($from([1,2,3,4,5]).skipTake(3, 2).select(), [4, 5], "Problem with skipTake.");
 
 # --------------------
 - name: Selector::Join
@@ -294,7 +297,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from([{ id: 1, t: 1}, {id: 2, t: 2}, {id: 3, t: 1}, {id: 4, t: 2 }])
+      var res = $from([{ id: 1, t: 1}, {id: 2, t: 2}, {id: 3, t: 1}, {id: 4, t: 2 }])
       .join([{t: 1, type: "ACTIVE"}, { t: 2, type: "INACTIVE" }], "type", "t", "t")
       .select(r => { r.type = r.type[0].type; return r });
 
@@ -308,22 +311,22 @@ jobs:
   to  : oJob Test
   args:
     func: |
-        ow.test.assert( _from(global.data).starts("name", "Finnegan").count(), 1, "Problem with starts.");
-        ow.test.assert( _from(global.data).ends("name", "Taylor").count(), 1, "Problem with ends.");
-        ow.test.assert( _from(global.data).equals("email", "angeline.novak@icloud.com").count(), 1, "Problem with equals.");
-        ow.test.assert( _from(global.data).greater("address.zip", 11704).count(), 795, "Problem with greater.");
-        ow.test.assert( _from(global.data).less("address.zip", 11704).count(), 203, "Problem with less.");
-        ow.test.assert( _from(global.data).greaterEquals("address.zip", 11704).count(), 797, "Problem with greaterEquals.");
-        ow.test.assert( _from(global.data).lessEquals("address.zip", 11704).count(), 205, "Problem with lessEquals.");
-        ow.test.assert( _from(global.data).contains("email", "@icloud.com").count(), 74, "Problem with contains.");
-        ow.test.assert( _from(global.data).empty("address.zone").count(), 1000, "Problem with empty (1).");
-        ow.test.assert( _from(global.data).empty("address.zip").count(), 0, "Problem with empty (2).");
-        ow.test.assert( _from(global.data).match("email", "\@icloud\.com$").count(), 74, "Problem with match.");
-        ow.test.assert( _from(global.data).type("address.type", "string").count(), 0, "Problem with type (1).");
-        ow.test.assert( _from(global.data).type("address.address", "string").count(), 1000, "Problem with type (2).");
-        ow.test.assert( _from(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
-        ow.test.assert( _from(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
-        ow.test.assert( _from(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
+        ow.test.assert( $from(global.data).starts("name", "Finnegan").count(), 1, "Problem with starts.");
+        ow.test.assert( $from(global.data).ends("name", "Taylor").count(), 1, "Problem with ends.");
+        ow.test.assert( $from(global.data).equals("email", "angeline.novak@icloud.com").count(), 1, "Problem with equals.");
+        ow.test.assert( $from(global.data).greater("address.zip", 11704).count(), 795, "Problem with greater.");
+        ow.test.assert( $from(global.data).less("address.zip", 11704).count(), 203, "Problem with less.");
+        ow.test.assert( $from(global.data).greaterEquals("address.zip", 11704).count(), 797, "Problem with greaterEquals.");
+        ow.test.assert( $from(global.data).lessEquals("address.zip", 11704).count(), 205, "Problem with lessEquals.");
+        ow.test.assert( $from(global.data).contains("email", "@icloud.com").count(), 74, "Problem with contains.");
+        ow.test.assert( $from(global.data).empty("address.zone").count(), 1000, "Problem with empty (1).");
+        ow.test.assert( $from(global.data).empty("address.zip").count(), 0, "Problem with empty (2).");
+        ow.test.assert( $from(global.data).match("email", "\@icloud\.com$").count(), 74, "Problem with match.");
+        ow.test.assert( $from(global.data).type("address.type", "string").count(), 0, "Problem with type (1).");
+        ow.test.assert( $from(global.data).type("address.address", "string").count(), 1000, "Problem with type (2).");
+        ow.test.assert( $from(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
+        ow.test.assert( $from(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
+        ow.test.assert( $from(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
 
 # --------------------
 - name: Where::Removed
@@ -332,7 +335,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert(_from([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
+      ow.test.assert($from([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
 
 # -----------------------------------
 - name: Where::Sub-map group selector
@@ -342,7 +345,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data).ends("email", "yahoo.com").equals("address.zip", 7424);
+      var res = $from(global.data).ends("email", "yahoo.com").equals("address.zip", 7424);
 
       ow.test.assert(res.count(), 1, "Problem with sub-map query count.");
       ow.test.assert(res.first().phone, "2764614795", "Problem with sub-map query select.");
@@ -355,9 +358,30 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = _from(global.data).sort("address.state", "-address.zip").first();
+      var res = $from(global.data).sort("address.state", "-address.zip").first();
 
-      ow.test.assert(res.address.zip, 99654, "Problema with sort by sub-maps.");
+      ow.test.assert(res.address.zip, 99654, "Problem with sort by sub-maps.");
+
+# -----------------------
+- name: Join::Simple join
+  deps: Load nLinq
+  args:
+    func: |
+      ow.test.assert($from([1,2,3]).join([4]).count(), 4, "Problem with simple join.");
+
+# -----------------------
+- name: Intersect::Simple intersect
+  deps: Load nLinq
+  args:
+    func: |
+      ow.test.assert($from([1,2,3]).intersect([3,4]).count(), 1, "Problem with simple intersect.");
+
+# -----------------------
+- name: Except::Simple except
+  deps: Load nLinq
+  args:
+    func: |
+      ow.test.assert($from([1,2,3]).except([3,4]).count(), 2, "Problem with simple except.");
 
 # ----------------------------------------------
 - name: Selector::Sub-map boolean group selector 
@@ -373,7 +397,7 @@ jobs:
         return t;
       });
 
-      var o = _from(res).group("test");
+      var o = $from(res).group("test");
 
       ow.test.assert(o["true"].length + o["false"].length, global.data.length, "Problem with boolean group selector.");
 
@@ -385,7 +409,7 @@ jobs:
   args:
     func: |
       var ar = [];
-      _from( Math.random ).limit(10).stream(r => ar.push(ar));
+      $from( Math.random ).limit(10).stream(r => ar.push(ar));
 
       ow.test.assert(ar.length, 10, "Problem with stream with limit.");
 
@@ -397,7 +421,7 @@ jobs:
   args:
     func: |
       var ar = [ 1, 2, 3, 4, 5], rs = [];
-      _from(() => { return ar.pop() }).stream(r => rs.push(r));
+      $from(() => { return ar.pop() }).stream(r => rs.push(r));
 
       ow.test.assert(rs.length, 5, "Problem with stream (1)");
       ow.test.assert(ar.length, 0, "Problem with stream (2)");

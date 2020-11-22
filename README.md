@@ -10,18 +10,20 @@ Examples:
 
 ````javascript
 // How many contacts there are with email ending in @domain.com
-_from( arrayOfContacts )
+$from( arrayOfContacts )
 .ends("email", "@domain.com")
 .count();
 
 // Sort all contacts in @domain.com by first name and last name
-_from( arrayOfContacts )
+$from( arrayOfContacts )
 .ends("email", "@domain.com")
 .sort("firstName", "lastName")
 .select()
 ````
 
 Althought some code (OpenAFSigil) is borrowed from [OpenAF](https://github.com/openaf/openaf) it will be released for both in browser use and in OpenAF use.
+
+Check out the [nLinq reference](Reference.md).
 
 ---
 
@@ -31,15 +33,13 @@ This is not an exaustive list by just to provide a heads-up on what is still mis
 
 ### Methods
 
-* except(array)
-* intersect(array)
-* union(array)
 * skipWhile(fn)
 * takeWhile(fn)
 
 ### Functionality
 
 * Parameter arrays to apply functions over values.
+* Context key aware "where" methods. 
 
 ## To be implemented extra
 
