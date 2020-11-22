@@ -31,18 +31,8 @@ Check out the [nLinq reference](Reference.md).
 
 This is not an exaustive list by just to provide a heads-up on what is still missing:
 
-### Methods
-
-* skipWhile(fn)
-* takeWhile(fn)
-
 ### Functionality
 
 * Parameter arrays to apply functions over values.
+* Parameter on or, and, not, andNot & orNot.
 * Context key aware "where" methods. 
-
-## To be implemented extra
-
-### Methods
-
-* merge(array)

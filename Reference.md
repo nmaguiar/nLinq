@@ -128,6 +128,11 @@ _tbc_
 | andNotIs | | |
 | orIs | | |
 | orNotIs | | |
+| or | | |
+| and | | |
+| not | | |
+| andNot | | | 
+| orNot | | |
 
 ### Changing the current result set
 
