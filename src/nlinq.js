@@ -175,7 +175,8 @@ var nLinq = function(anObject) {
             };
         },
         // Change default behaviour
-        useCase      : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? true : false); return code; },
+        useCase      : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? false : true); return code; },
+        notUseCase   : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? true : false); return code; },
         ignoreCase   : aTmpl => { useCase = ($$(aTmpl).isUnDef() || aTmpl ? false : true); return code; },
         limit        : aNum  => { if ($$(aNum).isNumber()) { alimit = aNum; } return code; },
         head         : aNum  => { code.limit(aNum); return code; },
