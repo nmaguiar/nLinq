@@ -26,6 +26,7 @@ todo:
 - Where::Sub-map group selector
 - Where::Removed
 - Where::Main constraints
+- Where::Case
 
 - Sort::Sort by sub-maps
 - Join::Simple join
@@ -336,6 +337,23 @@ jobs:
   args:
     func: |
       ow.test.assert($from([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
+
+# -----------------
+- name: Where::Case
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      ow.test.assert($from(["abc", "ABC"]).equals("AbC").count(), 2, "Problem with case insensitive (1).");
+      ow.test.assert($from(["abc", "ABC"]).useCase(true).equals("AbC").count(), 0, "Problem with case sensitive (1).");
+
+      ow.test.assert($from(global.data).starts("name", "CArInA").count(), 1, "Problem with case insensitive (2).");
+      ow.test.assert($from(global.data).useCase(true).starts("name", "CArInA").count(), 0, "Problem with case sensitive (2).");
+
+      ow.test.assert($from(global.data).starts("address.state", "ny").any(), true, "Problem with case insensitive (3).");
+      ow.test.assert($from(global.data).useCase(true).starts("address.state", "ny").any(), false, "Problem with case sensitive (3).");
 
 # -----------------------------------
 - name: Where::Sub-map group selector
