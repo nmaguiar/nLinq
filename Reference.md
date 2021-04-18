@@ -13,7 +13,7 @@ Listed below, there are different combinations of WHERE and SELECT functions tha
 
 ## FROM
 
-The input should be primarially an array. If a map is provided it will be converted into an array:
+The input should be primarially an array. If a map is provided it will be converted into an array. For streams it can also be a function.
 
 ### Simple array
 ````javascript
@@ -47,29 +47,62 @@ var outData = $from(inData).select();
 
 ### A function
 
-_tbc_
+````javascript
+var ll = 0, sum = 0;
+var fn = () => ll++;
+$from(fn).limit(5).stream(r => sum += r);
+// sum = 10 | ll = 6
+````
 
 ## WHERE
 
-_tbc_ 
+### Restriciting prefixes and suffixes
 
-### Restricting the result set
+Consider the following example:
+
+````javascript
+var names = [
+  { first: "James", last: "Bond" },
+  { first: "James", last: "Scott" },
+  { first: "Louis", last: "Bond" }
+];
+````
 
 | Method | Description | Example |
 |------|-------------|---------|
-| starts | | |
-| andStarts | | |
-| notStarts | | |
-| andNotStarts | | |
-| orStarts | | |
-| orNotStarts | | |
-| ends | | |
-| andEnds | | |
-| notEnds | | |
-| andNotEnds | | |
-| orEnds | | |
-| orNotEnds | | |
+| starts | Restricts string fields prefix to a value | ````$from(names).starts("first", "J").select()```` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"}]_ |
+| andStarts | Restricts string fields prefix to a value in addition to the previous restriction | ````$from(names).starts("first", "J").starts("last", "B").select()```` _[{"first":"James","last":"Bond"}]_ |
+| notStarts | Restricts string fields that are not prefixed by a value | ````$from(names).notStarts("first", "J").select()```` _[{"first":"Louis","last":"Bond"}]_ |
+| andNotStarts | Restricts string fields that are not prefixed by a value in addition to the previous restriction | ````$from(names).starts("first", "J").andNotStarts("last", "S").select()```` _[{"first":"James","last":"Bond"}]_ |
+| orStarts | Restricts string fields prefix to a value in alternative to the previous restriction | ````$from(names).starts("first", "Ja").orStarts("last", "Bo").select()```` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"},{"first":"Louis","last":"Bond"}]_ |
+| orNotStarts | Restricts string fields prefix that are not prefixed by a value in alternative to the previous restriction | ````$from(names).starts("first", "Ja").orNotStarts("last", "Sc").select()```` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"},{"first":"Louis","last":"Bond"}]_ |
+| ends | Restricts string fields suffix to a value | ````$from(names).ends("last", "nd").select()```` _[{"first":"James","last":"Bond"},{"first":"Louis","last":"Bond"}]_ |
+| andEnds | Restricts string fields suffix to a value in addition to the previous restriction | ````$from(names).ends("first", "es").andEnds("last", "d").select()```` _[{"first":"James","last":"Bond"}]_ |
+| notEnds | Restricts string fields that are not suffixed by a value | ````$from(names).notEnds("last", "Bond").select()```` _[{"first":"James","last":"Scott"}]_ |
+| andNotEnds | Restricts string fields that are not suffixed by a value in addition to a previous restriction | ````$from(names).starts("first", "J").andNotEnds("last", "d").select()```` _[{"first":"James","last":"Scott"}]_ |
+| orEnds | Restricts string fields that are suffixed by a value in alternative to a previous restriction | ````$from(names).starts("first", "J").orEnds("first", "d").select()```` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"}]_ |
+| orNotEnds | Restricts string fields that are not suffixed by a value in alternative to a previous restriction | ````$from(names).starts("first", "J").orNotEnds("first", "s").select()```` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"}]_ |
+### Restricting by equality
+
+| Method | Description | Example |
+|------|-------------|---------|
 | andEquals | | |
+| greaterEquals | | |
+| andGreaterEquals | | |
+| notGreaterEquals | | |
+| andNotGreaterEquals | | |
+| orGreaterEquals | | |
+| orNotGreaterEquals | | |
+| lessEquals | | |
+| andLessEquals | | |
+| andNotLessEquals | | |
+| orLessEquals | | |
+| orNotLessEquals | | |
+
+### Restricting by value
+
+| Method | Description | Example |
+|------|-------------|---------|
 | greater | | |
 | andGreater | | |
 | notGreater | | |
@@ -82,17 +115,21 @@ _tbc_
 | andNotLess | | | 
 | orLess | | | 
 | orNotLess | | | 
-| greaterEquals | | |
-| andGreaterEquals | | |
-| notGreaterEquals | | |
-| andNotGreaterEquals | | |
-| orGreaterEquals | | |
-| orNotGreaterEquals | | |
-| lessEquals | | |
-| andLessEquals | | |
-| andNotLessEquals | | |
-| orLessEquals | | |
-| orNotLessEquals | | |
+| between | | |
+| andBetween| | |
+| andNotBetween| | |
+| orBetween| | |
+| orNotBetween| | |
+| betweenEquals | | |
+| andBetweenEquals | | |
+| andNotBetweenEquals | | |
+| orBetweenEquals | | |
+| orNotBetweenEquals | | |
+
+### Restricting by value matching
+
+| Method | Description | Example |
+|------|-------------|---------|
 | contains | | | 
 | andContains | | |
 | andNotContains | | |
@@ -108,21 +145,19 @@ _tbc_
 | andNotMatch | | |
 | orMatch | | |
 | orNotMatch | | |
+
+### Restricting by value type
+
+| Method | Description | Example |
+|------|-------------|---------|
 | type | | |
 | andType| | |
 | andNotType| | |
 | orType| | |
 | orNotType| | |
-| between | | |
-| andBetween| | |
-| andNotBetween| | |
-| orBetween| | |
-| orNotBetween| | |
-| betweenEquals | | |
-| andBetweenEquals | | |
-| andNotBetweenEquals | | |
-| orBetweenEquals | | |
-| orNotBetweenEquals | | |
+
+| Method | Description | Example |
+|------|-------------|---------|
 | is | | |
 | andIs | | |
 | andNotIs | | |
