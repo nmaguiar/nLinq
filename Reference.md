@@ -177,6 +177,7 @@ var names = [
 | intersect | | |
 | except | | | 
 | union | | |
+| cartesian | | |
 | attach | | |
 | sort | | |
 | assign | | |
