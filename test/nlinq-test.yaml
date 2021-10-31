@@ -28,6 +28,7 @@ todo:
 - Where::Main constraints
 - Where::Case
 - Where::Dollar
+- Where::Filter
 
 - Sort::Sort by sub-maps
 - Join::Simple join
@@ -340,13 +341,31 @@ jobs:
     func: |
       ow.test.assert($from([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
 
-#
+# -------------------
 - name: Where::Dollar
   to  : oJob Test
   args:
     func: |
       ow.test.assert($from(["$$.g", "$$.s"]).equals("$$.g").count(), 1, "Problem with where equals dollar.");
       ow.test.assert($from(["$$.g", "$$.s"]).match("\\\$\\\$.g").count(), 1, "Problem with where match dollar.")
+
+# -------------------
+- name: Where::Filter
+  to  : oJob Test
+  args:
+    func: |
+      var dat1 = [{ x: 1, y: 1, a: 1 }, { x: 1, y: 2, a: 1}];
+      ow.test.assert($from(dat1).filter({x: 1, y: 1}).count(), 1, "Problem with filter of map to map (1)");
+      ow.test.assert($from(dat1).filter({x: 1, a: 1}).count(), 2, "Problem with filter of map to map (2)");
+      ow.test.assert($from(dat1).filter(r => r.y == 1).count(), 1, "Problem with filter of function");
+
+      var dat2 = [ [1, 2], [1, 3]];
+      ow.test.assert($from(dat2).filter(1).count(), 2, "Problem with filter of array (1)"); 
+      ow.test.assert($from(dat2).filter(2).count(), 1, "Problem with filter of array (2)"); 
+
+      var dat3 = [ 1, 1, 2, 3];
+      ow.test.assert($from(dat3).filter(1).count(), 2, "Problem with filter of value (1)");
+      ow.test.assert($from(dat3).filter(2).count(), 1, "Problem with filter of value (2)");
 
 # -----------------
 - name: Where::Case
