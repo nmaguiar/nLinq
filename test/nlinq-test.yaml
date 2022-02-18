@@ -16,6 +16,7 @@ todo:
 - Selector::Simple reverse selector
 - Selector::Sub-map group selector
 - Selector::Sub-map boolean group selector 
+- Selector::Sub-map selector
 - Selector::Simple limit selector
 - Selector::All
 - Selector::Last
@@ -232,6 +233,22 @@ jobs:
 
       ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
       ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
+
+# --------------------------------
+- name: Selector::Sub-map selector
+  deps: 
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = $from(global.data).equals({
+        address: {
+          state: "NY"
+        }
+      })
+
+      ow.test.assert(res.count(), 98, "Problem with sub-map selector")
 
 # -------------------
 - name: Selector::All
