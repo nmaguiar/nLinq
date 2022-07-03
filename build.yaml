@@ -10,6 +10,7 @@ todo:
 - Build browser version
 - Build OpenAF version
 - Test OpenAF version
+- Minimize
 
 ojob:
   opacks      :
@@ -72,3 +73,13 @@ jobs:
       tlogErr("There were {{fail}} tests in {{count}}.", tests)
       exit(-1);
     }
+
+# ---------------
+- name : Minimize
+  deps : Build OpenAF version
+  exec : |
+    args.dist = _$(args.dist, "dist").default(args.init.paths.dist)
+    
+    $sh("ojob ojob.io/oaf/compile file=" + args.dist + "/nlinq.js" + " output=" + args.dist + "/nlinq.min.js")
+    .prefix("compile")
+    .get()
