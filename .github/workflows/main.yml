@@ -55,3 +55,8 @@ jobs:
         with:
           name: nlinq-test.md
           path: nlinq-test.md
+          
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message   : github actions artifact upload
+          file_pattern     : dist/*.js
