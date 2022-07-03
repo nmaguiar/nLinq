@@ -1,7 +1,8 @@
 // nlinq.js
 //
 
-/* Author: Nuno Aguiar */
+// Version: 0.1.0
+// Author : Nuno Aguiar
 
 var nLinq_USE_CASE = false;
 var nLinq = function(anObject, aK) {
@@ -776,6 +777,9 @@ var $from = nLinq;
 
 // openafsigil.js
 //
+
+// Version: 0.1.0
+// Author : Nuno Aguiar
 
 const $$ = function(aObj) {
 	const _r = {
