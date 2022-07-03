@@ -80,6 +80,7 @@ jobs:
   exec : |
     args.dist = _$(args.dist, "dist").default(args.init.paths.dist)
     
-    $sh("ojob ojob.io/oaf/compile file=" + args.dist + "/nlinq.js" + " output=" + args.dist + "/nlinq.min.js")
+    var oj = io.fileExists("./ojob") ? "./ojob" : "ojob"
+    $sh(oj + " ojob.io/oaf/compile file=" + args.dist + "/nlinq.js" + " output=" + args.dist + "/nlinq.min.js")
     .prefix("compile")
     .get()
