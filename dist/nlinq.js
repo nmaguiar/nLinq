@@ -671,20 +671,20 @@ var nLinq = function(anObject, aK) {
             aMap.selector = _$(aMap.selector, "selector").isMap().default(void 0)
         
             aMap.where.forEach(w => {
-                if (isString(w.cond)) code = code[w.cond].apply(code, w.args)
+                if ($$(w.cond).isString()) code = code[w.cond].apply(code, w.args)
             })
             aMap.transform.forEach(t => {
-                if (isString(t.func)) {
+                if ($$(t.func).isString()) {
                     code = code[t.func].apply(code, t.args)
                 }
             })
         
             var res
-            if (isString(aMap.select)) res = code.tselect(new Function("elem", "index", "array", aMap.select))
-            if (isMap(aMap.select)) res = code.select(aMap.select)
+            if ($$(aMap.select).isString()) res = code.tselect(new Function("elem", "index", "array", aMap.select))
+            if ($$(aMap.select).isMap()) res = code.select(aMap.select)
         
-            if (isUnDef(res) && isMap(aMap.selector)) res = (isString(aMap.selector.func) ? $$({}).set(aMap.selector.func, code[aMap.selector.func].apply(code, aMap.selector.args)) : res)
-            if (isUnDef(res) && isUnDef(aMap.select)) res = code.select()
+            if ($$(res).isUnDef() && $$(aMap.selector).isMap()) res = ($$(aMap.selector.func).isString() ? $$({}).set(aMap.selector.func, code[aMap.selector.func].apply(code, aMap.selector.args)) : res)
+            if ($$(res).isUnDef() && $$(aMap.select).isUnDef()) res = code.select()
         
             return res
         },
