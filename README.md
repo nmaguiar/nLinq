@@ -33,7 +33,7 @@ Example of using nLinq in a browser:
 <html>
  <body>
   <h1>Test nLinq</h1>
-  <script src="nLinq/dist/nlinq.js"></script>
+  <script src="dist/nlinq.min.js"></script>
   <hr>
 
   <script> 
