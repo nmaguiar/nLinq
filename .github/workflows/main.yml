@@ -28,12 +28,12 @@ jobs:
       # Donwload openaf
       - name: Download openaf
         run : |
-          cd $GITHUB_WORKSPACE && wget https://openaf.io/unix64/nightly/install.sh && sh install.sh
+          cd $GITHUB_WORKSPACE && wget https://openaf.io/nightly/install.sh && sh install.sh
 
       # Runs a set of commands using the runners shell
       - name: Run nLinq build
         run: |
-          cd $GITHUB_WORKSPACE && ./ojob build.yaml
+          cd $GITHUB_WORKSPACE && ojob build.yaml
           
       # Upload artifacts
       - uses: actions/upload-artifact@v2
