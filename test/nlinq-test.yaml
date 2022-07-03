@@ -332,7 +332,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res1 = $from(global.data2).mselect(__, "filename", true)
+      var res1 = $from(global.data2).mselect(__, "filename")
       ow.test.assert(isMap(res1), true, "Problem with array to map conversion")
       
 

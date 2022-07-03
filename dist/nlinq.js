@@ -727,7 +727,7 @@ var nLinq = function(anObject, aK) {
         mselect: (aParam, aKey, dontRemove) => {
             var anArray = code.select(aParam)
             aKey        = _$(aKey, "aKey").isString().default("_key")
-            dontRemove  = _$(dontRemove, "dontRemove").isBoolean().default(false)
+            dontRemove  = _$(dontRemove, "dontRemove").isBoolean().default(true)
 
             var res = {};
             for(var i in anArray) {
