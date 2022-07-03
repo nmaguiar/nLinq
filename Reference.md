@@ -45,6 +45,14 @@ var outData = $from(inData).select();
 // [ { a: 1, _key: "a1" }, { a: 2, _key: "a2" }, { a: 3, _key: "a3"} ]
 ````
 
+You can specify the key name (instead of "_key") by adding an extra parameter:
+
+````javascript
+var inData  = { a1: { a: 1 }, a2: { a: 2 }, a3: { a: 3 } };
+var outData = $from(inData).select();
+// [ { a: 1, b: "a1" }, { a: 2, b: "a2" }, { a: 3, b: "a3"} ]
+````
+
 ### A function
 
 ````javascript
@@ -259,4 +267,14 @@ var result = $from(inData).select(r => {
 });
 // [ { name: "Vector 1", distance: 9 },
 //   { name: "Vector 2", distance: 13} ]
+````
+
+### Select into a map of maps
+
+The result set can be transformed into a map of maps by provided an index field:
+
+````javascript
+var inData  = [ { a: 1, b: "a1" }, { a: 2, b: "a2" }, { a: 3, b: "a3" } ];
+var outData = $from(inData).select(void 0, "b");
+// { "a1": {"a":1,"b":"a1"}, "a2": {"a":2,"b":"a2"}, "a3":{"a":3,"b":"a3"} }
 ````

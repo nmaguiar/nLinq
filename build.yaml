@@ -62,7 +62,7 @@ jobs:
   deps: Build OpenAF version
   exec: |
     // Run tests
-    $sh(getOpenAFPath() + "ojob " + args.init.paths.test + "/nlinq-test.yaml nlinq=" + args.init.paths.dist + "/openafnlinq.js test=" + args.init.paths.test)
+    $sh("sh " + getOpenAFPath() + "ojob " + args.init.paths.test + "/nlinq-test.yaml nlinq=" + args.init.paths.dist + "/openafnlinq.js test=" + args.init.paths.test)
     .prefix("test")
     .get();
 
