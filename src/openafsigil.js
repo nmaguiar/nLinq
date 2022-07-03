@@ -1,3 +1,6 @@
+// Version: 0.1.0
+// Author : Nuno Aguiar
+
 const $$ = function(aObj) {
 	const _r = {
 		/**

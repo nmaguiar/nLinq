@@ -1,4 +1,5 @@
-/* Author: Nuno Aguiar */
+// Version: 0.1.0
+// Author : Nuno Aguiar
 
 var nLinq_USE_CASE = false;
 var nLinq = function(anObject, aK) {
