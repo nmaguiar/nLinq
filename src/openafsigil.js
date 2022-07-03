@@ -3,7 +3,7 @@ const $$ = function(aObj) {
 		/**
 		 * <odoc>
 		 * <key>$$.get(aPath) : Object</key>
-		 * Given aObject it will try to parse the aPath a retrive the corresponding object under that path. Example:\
+		 * Given aObject it will try to parse the aPath and retrive the corresponding object under that path. Example:\
 		 * \
 		 * var a = { a : 1, b : { c: 2, d: [0, 1] } };\
 		 * \
@@ -220,10 +220,11 @@ const _$ = function(aValue, aPrefixMessage) {
         }, 
         toMap: (aMessage) => {
             if ($$(aMessage).isUnDef()) aMessage = aPrefixMessage + "can't be converted to a map"
-            if (defined) try { 
+            if (defined) 
+              try { 
                 var __f = j => { return ($$(global.jsonParse).isFunction() ? global.jsonParse(j, true) : JSON.parse(j)) }
                 aValue = __f(aValue) 
-            } catch(e) { throw aMessage }
+              } catch(e) { throw aMessage }
             return __r
         },
         isObject: (aMessage) => {
@@ -291,7 +292,7 @@ const _$ = function(aValue, aPrefixMessage) {
 		// Generic validations
         check: (aFunction, aMessage) => {
 			if (!$$(aFunction).isFunction() && !$$(aFunction).isString()) throw "please provide a function to check";
-            var res = ($$(aFunction).isFunction() ? aFunction(aValue) : (new Function('v', 'return ' + aFunction))(aValue));
+            var res = ($$(aFunction).isFunction() ? aFunction(aValue) : (newFn('v', 'return ' + aFunction))(aValue));
             if ($$(aMessage).isUnDef()) aMessage = aPrefixMessage + "is not ok";
             if (defined && !res) throw aMessage;
             return __r;
@@ -341,22 +342,22 @@ const _$ = function(aValue, aPrefixMessage) {
         },        
         less: (aVal, aMessage) => {
             if ($$(aMessage).isUnDef()) aMessage = aPrefixMessage + "is less than " + aVal;
-            if (defined && aValue > aVal) throw aMessage;
+            if (defined && aValue >= aVal) throw aMessage;
             return __r;
         },
         lessEquals: (aVal, aMessage) => {
             if ($$(aMessage).isUnDef()) aMessage = aPrefixMessage + "is less or equals than " + aVal;
-            if (defined && aValue >= aVal) throw aMessage;
+            if (defined && aValue > aVal) throw aMessage;
             return __r;
         },
         greater: (aVal, aMessage) => {
             if ($$(aMessage).isUnDef()) aMessage = aPrefixMessage + "is greater than " + aVal;
-            if (defined && aValue < aVal) throw aMessage;
+            if (defined && aValue <= aVal) throw aMessage;
             return __r;
         },
         greaterEquals: (aVal, aMessage) => {
             if ($$(aMessage).isUnDef()) aMessage = aPrefixMessage + "is greater or equals than " + aVal;
-            if (defined && aValue <= aVal) throw aMessage;
+            if (defined && aValue < aVal) throw aMessage;
             return __r;
         },
 		
