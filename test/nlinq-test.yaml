@@ -41,6 +41,9 @@ todo:
 - Stream::Stream with limit
 - Stream::Stream simple test
 
+- Query::Simple query 1
+- Query::Simple query 2
+
 include:
 - oJobTest.yaml
 
@@ -514,3 +517,62 @@ jobs:
 
       ow.test.assert(rs.length, 5, "Problem with stream (1)");
       ow.test.assert(ar.length, 0, "Problem with stream (2)");
+
+# ---------------------------
+- name: Query::Simple query 1
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res1 = $from(global.data).sort("address.state", "-address.zip").first()
+      var res2 = $from(global.data).query({
+        transform: [
+          {
+            func: "sort",
+            args: [
+              "address.state",
+              "-address.zip"
+            ] 
+          }
+        ], 
+        selector: {
+          func: "first",
+          args: []
+        }
+      })
+
+      ow.test.assert(res1.address.zip, res2.address.zip, "Problem with simple query 1.")
+
+# ---------------------------
+- name: Query::Simple query 2
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res1 = $from(global.data).ends("email", "yahoo.com").equals("address.zip", 7424).count()
+      var res2 = $from(global.data).query({
+        where: [
+          {
+            cond: "ends",
+            args: [
+              "email",
+              "yahoo.com"
+            ]
+          }, {
+            cond: "equals",
+            args: [
+              "address.zip",
+              7424
+            ]
+          }
+        ],
+        selector: {
+          func: "count"
+        }
+      })
+
+      ow.test.assert(res1, res2, "Problem with simple query 2.")
