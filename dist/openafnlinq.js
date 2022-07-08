@@ -770,9 +770,9 @@ var nLinq = function(anObject, aK) {
             aMap = _$(aMap, "aMap").isMap().default({})
         
             aMap.where     = _$(aMap.where, "where").isArray().default([])
-            aMap.select    = _$(aMap.select, "select").default(__)
+            aMap.select    = _$(aMap.select, "select").default(void 0)
             aMap.transform = _$(aMap.transform, "transform").isArray().default([])
-            aMap.selector  = _$(aMap.selector, "selector").isMap().default(__)
+            aMap.selector  = _$(aMap.selector, "selector").isMap().default(void 0)
         
             var f = code
         
