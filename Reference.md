@@ -278,3 +278,74 @@ var inData  = [ { a: 1, b: "a1" }, { a: 2, b: "a2" }, { a: 3, b: "a3" } ];
 var outData = $from(inData).select(void 0, "b");
 // { "a1": {"a":1,"b":"a1"}, "a2": {"a":2,"b":"a2"}, "a3":{"a":3,"b":"a3"} }
 ````
+
+## QUERY
+
+It's also possible to provide all the query as a map instead of method calls. To do this you can use:
+
+````javascript
+var result = $from(anArrayOfData).query(aQueryMap)
+````
+
+The query map to provide to the _query_ method is composed of 3 or 4 parts depending on the use:
+
+````javascript
+aQueryMap = { where: [], transform: [], select: {} }
+
+// or
+
+aQueryMap = { where: [], transform: [], selector: {} }
+````
+
+The following example is provided in YAML with comments to make it easier to visualize:
+
+````yaml
+# 1. The where part is composed of an array of conditions and arguments that limit the data
+where:
+## This is the same as doing .equals("isFile", true)
+- cond: equals
+  args:
+  - isFile
+  - true
+# 2. The transform part is composed of an array of functions and arguments that transform the data
+transform:
+## These are the same as doing .attach("lastAccess", elem => new Date(elem.lastAccess)).sort("-size")
+- func: attach
+  args:
+  - lastAccess
+  - !!js/eval elem => new Date(elem.lastAccess)
+- func: sort
+  args:
+  - "-size"
+# 3. The select part if composed of the same map you would provide to a .select method
+## This is equivalent to .select({ filename: "n/a", size: -1 })
+select:
+  filename: n/a
+  size    : -1
+# 4. The selector part as an alternative to part 3 allows the use of selector functions
+## selector:
+### This is equivalent to .at(0)
+##  func: at
+##  args:
+##  - 0
+````
+
+> **NOTE:** As you can see each part (with the exception of _select_) is always an array of maps or a single map with a function name (cond/func) followed by an array of the corresponding arguments (args). There are no restrictions on the functions you should use on _where_ or _transform_. The only difference between _where_/_transform_ and _select_/_selector_ is that _select_/_selector_ are functions that cannot be chained and will return a result.
+
+In the end this yaml could be provided as a JSON map to the query method like this:
+
+````javascript
+aQueryMap = { where: [ { cond: "equals", args: [ "isFile", true ] } ], transform: [ { func: "attach", args: [ "lastAccess", elem => new Date(elem.lastAccess) }, { func: "sort", args: "-size" ], select: { filename: "n/a", size: -1 } }
+````
+
+**Translation:**
+Will filter an array of map for the entries where the field _isFile_ is true, will add/replace the field _attach_ converting it into a javascript Date, then sort the resulting array by biggest values on the field _size_ (descending order) and returning an array of maps as a result with two fields: _filename_ and _size_. If _filename_ is not defined for some entry it will be represented as "n/a"; if size is not defined for some entry it will be represented as -1.
+
+Similary using a selector the JSON map to the query method would look like:
+
+````javascript
+aQueryMap = { where: [ { cond: "equals", args: [ "isFile", true ] } ], transform: [ { func: "attach", args: [ "lastAccess", elem => new Date(elem.lastAccess) }, { func: "sort", args: "-size" ], selector: { func: "at", args: [ 0 ] } }
+````
+
+**Translation:**
+Will filter an array of map for the entries where the field _isFile_ is true, will add/replace the field _attach_ converting it into a javascript Date, then sort the resulting array by biggest values on the field _size_ (descending order) and returning only the map, on position 0, of the resulting array of maps.
