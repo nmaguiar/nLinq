@@ -210,10 +210,11 @@ var names = [
 | average | Returns the average value of a field from the result | ````$from(anArrayOfTemperatures).average("temperature")```` |
 | sum | Returns the sum value of a field from the result | ````$from(anArrayOfFiles).sum("size")```` |
 | distinct | Returns an array of distinct values for a specific field from the result | ````$from(anArrayOfMeasures).distinct("measureName")```` |
-| group | Returns a map grouping the array records by a specific field from the result | ````$from(anArrayOfTemperatures).group("city")```` |
+| group | Returns a map grouping the array of records by a specific field from the result | ````$from(anArrayOfTemperatures).group("city")```` |
 | at | Returns a single entry of the result set | ````$from(anArray).at(23)```` |
 | all | Returns true if all records from the original array are present on the final result set (false otherwise) | ````$from(anArray).all()```` |
 | count | Returns the number of records of the final result set | ````$from(anArray).count()```` |
+| countBy | Returns an array counting records per each value after grouping the array of records by a specific field from the result | ````$from(anArray).countBy("groupByFieldName", "countRecordsFieldName", "keyFieldNameToUseOnResult")```` |
 | first | Returns the first record of the final result set | ````$from(anArray).first()```` |
 | last | Returns the last record of the final result set | ````$from(anArray).last()```` |
 | any | Returns true if the result set has any record at all (false otherwise) | ````$from(anArray).any()```` |
