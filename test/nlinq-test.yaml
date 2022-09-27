@@ -24,6 +24,7 @@ todo:
 - Selector::SkipTake
 - Selector::Join
 - Selector::Map conversion
+- Selector::CountBy
 
 - Where::Sub-map group selector
 - Where::Removed
@@ -237,6 +238,19 @@ jobs:
 
       ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
       ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
+
+# -----------------------
+- name: Selector::CountBy
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = $from(global.data).countBy("address.state", "count", "state")
+
+      ow.test.assert($from(res).equals("state", "NY").at(0).count, 98, "Problem with countBy (1)")
+      ow.test.assert($from(res).equals("state", "VA").at(0).count, 33, "Problem with countBy (2)")
 
 # --------------------------------
 - name: Selector::Sub-map selector
