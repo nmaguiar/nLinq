@@ -33,6 +33,7 @@ todo:
 - Where::Case
 - Where::Dollar
 - Where::Filter
+- Where::toDate
 
 - Sort::Sort by sub-maps
 - Join::Simple join
@@ -395,6 +396,26 @@ jobs:
         ow.test.assert( $from(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
         ow.test.assert( $from(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
         ow.test.assert( $from(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
+
+# -------------------
+- name: Where::toDate
+  deps:
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var ar = []
+      ar.push({ i: 0, d: 1568402110742 })
+      ar.push({ i: 1, d: "2018-01-01T01:12:23" })
+      ar.push({ i: 2, d: 1168402138776 })
+      ar.push({ i: 3, d: "2018-01-09" })
+
+      var r = $from(ar).toDate("d").sort("d").select()
+
+      ow.test.assert(r[0].i, 2, "Problem with toDate (1)")
+      ow.test.assert(r[1].i, 1, "Problem with toDate (2)")
+      ow.test.assert(r[2].i, 3, "Problem with toDate (3)")
+      ow.test.assert(r[3].i, 0, "Problem with toDate (4)")
 
 # --------------------
 - name: Where::Removed
