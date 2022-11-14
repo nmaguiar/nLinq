@@ -570,6 +570,21 @@ var nLinq = function(anObject, aK) {
 
             return code;
         },
+        toDate: aKey => {
+            _$(aKey, "key").$_()
+
+            res = applyConditions(res)
+            res.forEach(r => {
+                try {
+                    var v = $$(r).get(aKey)
+                    if ($$(v).isString() || $$(v).isNumber())
+                        $$(r).set(aKey, new Date(v))
+                } catch(e) {
+                }
+            })         
+            
+            return code
+        },
         filter : aValue => {
             _$(aValue, "value").$_();
 
