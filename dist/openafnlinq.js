@@ -712,10 +712,23 @@ var nLinq = function(anObject, aK) {
                 } else {
                     // array parameter
                     if ($$(aParam).isArray()) {
-                        var aNewParam = {};
+                        var _c = {}
                         aParam.forEach(r => {
-                            if ($$(r).isString()) $$(aNewParam).set(r, void 0);
-                        });
+                            if ($$(r).isString()) {
+                                if (r.indexOf(":") > 0) {
+                                    var key = r.substring(0, r.indexOf(":"))
+                                    var mkey = r.substring(r.indexOf(":") + 1)
+                                    _c[key] = mkey
+                                } else {
+                                    _c[r] = r
+                                }
+                            }
+                        })
+                        return res.map(_r => {
+                            var _res = {}
+                            Object.keys(_c).forEach(r => $$(_res).set(r, $$(_r).get(_c[r])))
+                            return _res
+                        })
                     }
                     // map parameter
                     if ($$(aParam).isMap()) {

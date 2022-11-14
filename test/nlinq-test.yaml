@@ -17,6 +17,7 @@ todo:
 - Selector::Sub-map group selector
 - Selector::Sub-map boolean group selector 
 - Selector::Sub-map selector
+- Selector::Array selector
 - Selector::Simple limit selector
 - Selector::All
 - Selector::Last
@@ -238,6 +239,20 @@ jobs:
 
       ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
       ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
+
+# ------------------------------
+- name: Selector::Array selector
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = $from(global.data).equals("address.state", "NY").select(["state:address.state", "phone"])
+
+      ow.test.assert(res.length, 98, "Problem with array selector (1)")
+      ow.test.assert(isDef(res[0].state), true, "Problem with array selector (2)")
+      ow.test.assert(isDef(res[0].phone), true, "Problem with array selector (3)")
 
 # -----------------------
 - name: Selector::CountBy
