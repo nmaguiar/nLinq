@@ -1,6 +1,6 @@
-// Version: 0.1.0
+// Version: 0.1.1
 // Author : Nuno Aguiar
-
+if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {
 	const _r = {
 		/**
@@ -109,8 +109,9 @@ const $$ = function(aObj) {
 			prev[prevK] = aValue;
 			return orig;
         },
-        isDef: () => { return (!(typeof aObj == 'undefined')) ? true : false; },
-        isUnDef: () => { return (typeof aObj == 'undefined') ? true : false; },
+        isDef: () => { return (isJavaObject(aObj) || !(typeof aObj == 'undefined')) ? true : false },
+        isUnDef: () => { return (isJavaObject(aObj) || !(typeof aObj == 'undefined')) ? false : true },
+        isJavaObject: () => { return isJavaObjecta(aObj) },
         isArray: () => { return Array.isArray(aObj); },
         isMap: () => { return (Object.prototype.toString.call(aObj) == "[object Object]"); },
         isObject: () => { var type = typeof aObj; return type === 'function' || type === 'object' && !!aObj; },
