@@ -1,7 +1,7 @@
 // nlinq.js
 //
 
-// Version: 0.1.0
+// Version: 0.1.1
 // Author : Nuno Aguiar
 
 var nLinq_USE_CASE = false;
