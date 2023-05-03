@@ -268,6 +268,11 @@ jobs:
       ow.test.assert($from(res).equals("state", "NY").at(0).count, 98, "Problem with countBy (1)")
       ow.test.assert($from(res).equals("state", "VA").at(0).count, 33, "Problem with countBy (2)")
 
+      var res2 = $from(global.data).equals("address.state", "NY")
+
+      ow.test.assert(res2.countBy("address.zip,address.city").length, 69, "Problem with countBy (3)")
+      ow.test.assert(res2.equals("address.city", "Monroe").countBy("address.state,address.city")[0]._count, 4, "Problem with countBy (4)")
+
 # --------------------------------
 - name: Selector::Sub-map selector
   deps: 
