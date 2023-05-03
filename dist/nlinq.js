@@ -1,7 +1,7 @@
 // nlinq.js
 //
 
-// Version: 0.1.1
+// Version: 0.1.2
 // Author : Nuno Aguiar
 
 var nLinq_USE_CASE = false;
@@ -865,7 +865,7 @@ var $from = nLinq;
 // openafsigil.js
 //
 
-// Version: 0.1.1
+// Version: 0.1.2
 // Author : Nuno Aguiar
 if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {

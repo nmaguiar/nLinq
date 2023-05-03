@@ -1,4 +1,4 @@
-// Version: 0.1.1
+// Version: 0.1.2
 // Author : Nuno Aguiar
 
 var nLinq_USE_CASE = false;
