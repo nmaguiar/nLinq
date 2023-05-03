@@ -1,7 +1,7 @@
 // nlinq.js
 //
 
-// Version: 0.1.2
+// Version: 0.1.3
 // Author : Nuno Aguiar
 
 var nLinq_USE_CASE = false;
@@ -491,6 +491,32 @@ var nLinq = function(anObject, aK) {
 
             return vals
         },
+        groupBy: (aKey) => {
+            aKey      = _$(aKey).isString().default("key")
+
+            var ks = aKey.split(",")
+            var _fr = {}
+
+            var fn = (_r, _i, m) => {
+                var _vs = Object.keys(_r)
+                _vs.forEach((v, _j) => {
+                    m[v] = {}
+                    if (_i + 1 < ks.length) {
+                        fn(nLinq(_r[v]).group(ks[_i + 1]), _i + 1, m[v])
+                    }
+                    if (ks.length == _i + 1) {
+                        m[v] = _r[v]
+                    }
+                })
+            }
+
+            if (ks.length > 0) {
+                fn(code.group(ks[0]), 0, _fr)
+                return _fr
+            } else {
+                return []
+            }
+        },
         countBy: (aKey, aCountKey, aAltKey) => {
             aKey      = _$(aKey).isString().default("key")
             aCountKey = _$(aCountKey).isString().default("_count")
@@ -865,7 +891,7 @@ var $from = nLinq;
 // openafsigil.js
 //
 
-// Version: 0.1.2
+// Version: 0.1.3
 // Author : Nuno Aguiar
 if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {

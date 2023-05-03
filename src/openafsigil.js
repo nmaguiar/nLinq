@@ -1,4 +1,4 @@
-// Version: 0.1.2
+// Version: 0.1.3
 // Author : Nuno Aguiar
 if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {

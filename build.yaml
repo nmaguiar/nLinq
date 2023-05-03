@@ -84,4 +84,4 @@ jobs:
     .prefix("compile")
     .get()
   
-    io.writeFileString(args.dist + "/nlinq.min.js", "/*v:0.1.2;a:Nuno Aguiar*/\n" + io.readFileString(args.dist + "/nlinq.min.js"))
+    io.writeFileString(args.dist + "/nlinq.min.js", "/*v:0.1.3;a:Nuno Aguiar*/\n" + io.readFileString(args.dist + "/nlinq.min.js"))
