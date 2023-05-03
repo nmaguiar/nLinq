@@ -937,7 +937,7 @@ var $from = nLinq;
 // openafsigil.js
 //
 
-// Version: 0.1.3
+// Version: 0.1.4
 // Author : Nuno Aguiar
 if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {
