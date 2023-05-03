@@ -214,7 +214,7 @@ var names = [
 | at | Returns a single entry of the result set | ````$from(anArray).at(23)```` |
 | all | Returns true if all records from the original array are present on the final result set (false otherwise) | ````$from(anArray).all()```` |
 | count | Returns the number of records of the final result set | ````$from(anArray).count()```` |
-| countBy | Returns an array counting records per each value after grouping the array of records by a specific field from the result | ````$from(anArray).countBy("groupByFieldName", "countRecordsFieldName", "keyFieldNameToUseOnResult")```` |
+| countBy | Returns an array counting records per each value after grouping the array of records by a specific field from the result | ````$from(anArray).countBy("groupByFieldName1,groupByFieldName2", "countRecordsFieldName", "keyFieldNameToUseOnResult1,keyFieldNameToUseOnResult2")```` |
 | first | Returns the first record of the final result set | ````$from(anArray).first()```` |
 | last | Returns the last record of the final result set | ````$from(anArray).last()```` |
 | any | Returns true if the result set has any record at all (false otherwise) | ````$from(anArray).any()```` |
