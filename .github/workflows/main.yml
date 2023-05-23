@@ -22,18 +22,21 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Cache OpenAF runtime
+        uses: actions/cache@v3
+        with:
+          key : oaf-nightly
+          path: /tmp/oaf
+          
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       # Donwload openaf
       - name: Download openaf
-        run : |
-          cd $GITHUB_WORKSPACE && wget https://openaf.io/nightly/install.sh && sh install.sh
-
-      # Runs a set of commands using the runners shell
-      - name: Run nLinq build
-        run: |
-          cd $GITHUB_WORKSPACE && ojob build.yaml
+        uses: openaf/ojob-action@v2
+        with:
+          ojob: build.yaml
+          dist: nightly
           
       # Upload artifacts
       - uses: actions/upload-artifact@v2
@@ -56,7 +59,21 @@ jobs:
           name: nlinq-test.md
           path: nlinq-test.md
           
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message   : github actions artifact upload
-          file_pattern     : dist/*.js
+      - run : |
+          # user identification
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          # only add/commit/push if new contents exist
+          if [[ $(git diff --quiet && git diff --staged --quiet) ]]; then
+            git add dist/nlinq.js
+            git add dist/nlinq.min.js
+            git add dist/openafnlinq.js
+            git add nlinq-test.md
+            git commit -m "update build files"
+            git push
+          fi
+          
+      #- uses: stefanzweifel/git-auto-commit-action@v4
+      #  with:
+      #    commit_message   : github actions artifact upload
+      #    file_pattern     : dist/*.js
