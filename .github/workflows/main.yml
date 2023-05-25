@@ -35,7 +35,7 @@ jobs:
 
       # Donwload openaf
       - name: Download openaf
-        uses: openaf/ojob-action@v2
+        uses: openaf/ojob-action@v3
         with:
           ojob: build.yaml
           dist: nightly
@@ -61,19 +61,11 @@ jobs:
           name: nlinq-test.md
           path: nlinq-test.md
           
-      - run : |
-          # user identification
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          # only add/commit/push if new contents exist
-          if [[ -n "$(git status --porcelain)" ]]; then
-            git add dist/nlinq.js
-            git add dist/nlinq.min.js
-            git add dist/openafnlinq.js
-            git add nlinq-test.md
-            git commit -m "update build files"
-            git push
-          fi
+      - name: Push
+        uses: openaf/ojob-action@v3
+        with:
+          ojob: 'ojob.io/git/githubCheckIn'
+          args: 'message="update\ build"'
           
       #- uses: stefanzweifel/git-auto-commit-action@v4
       #  with:
