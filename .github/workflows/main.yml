@@ -63,8 +63,10 @@ jobs:
           
       - name: Push
         uses: openaf/ojob-action@v3
+        env :
+          GH_TOKEN: ${{ github.token }}
         with:
-          ojob: 'ojob.io/git/githubCheckIn'
+          ojob: 'ojob.io/git/hub/contentIn'
           args: 'message="update\ build"'
           
       #- uses: stefanzweifel/git-auto-commit-action@v4
