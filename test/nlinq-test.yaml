@@ -416,6 +416,7 @@ jobs:
         ow.test.assert( $from(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
         ow.test.assert( $from(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
         ow.test.assert( $from(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
+        ow.test.assert( $from(global.data.map(clone)).detach("isICloud").is("isICloud").count(), 0, "Problem with detach." )
 
 # -------------------
 - name: Where::toDate
