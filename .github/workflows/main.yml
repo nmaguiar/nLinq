@@ -27,7 +27,7 @@ jobs:
       - name: Cache OpenAF runtime
         uses: actions/cache@v3
         with:
-          key : oaf-nightly
+          key : oaf-t8
           path: /tmp/oaf
           
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -38,7 +38,7 @@ jobs:
         uses: openaf/ojob-action@v3
         with:
           ojob: build.yaml
-          dist: nightly
+          dist: t8
           
       # Upload artifacts
       - uses: actions/upload-artifact@v2
