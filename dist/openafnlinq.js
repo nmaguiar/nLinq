@@ -12,7 +12,7 @@ var nLinq = function(anObject, aK) {
         });
     }
 
-    //_$(anObject).isArray().$_();
+    //_$(anObject).isArray().$_(); 
     var res = anObject, where = "", useCase = nLinq_USE_CASE, useOr = false, useNot = false, alimit = 0, askip = 0, negative = false, whereFn = [];
 
     // Auxiliary functions
@@ -658,6 +658,14 @@ var nLinq = function(anObject, aK) {
             }
 
             return code;
+        },
+        detach: aKey => {
+            _$(aKey, "key").$_()
+
+            res = applyConditions(res)
+            res = res.map(r => { $$(r).unset(aKey); return r; })
+
+            return code
         },
         toDate: aKey => {
             _$(aKey, "key").$_()
