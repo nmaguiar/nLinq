@@ -5,327 +5,543 @@
   "profile": [
     {
       "name": "Selector::Simple result",
-      "hits": 1,
-      "sum": 2,
-      "last": 2,
-      "max": 2,
-      "min": 2,
-      "avg": 2
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
+      "max": 1,
+      "min": 1,
+      "avg": null
     },
     {
       "name": "Selector::Simple result function",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
-      "max": 1,
-      "min": 1,
-      "avg": 1
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "0"
+      },
+      "last": {
+        "v": "0"
+      },
+      "max": 0,
+      "min": 0,
+      "avg": null
     },
     {
       "name": "Selector::Simple result function transform",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
-      "max": 1,
-      "min": 1,
-      "avg": 1
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "0"
+      },
+      "last": {
+        "v": "0"
+      },
+      "max": 0,
+      "min": 0,
+      "avg": null
     },
     {
       "name": "Selector::Simple result map",
-      "hits": 1,
-      "sum": 3,
-      "last": 3,
-      "max": 3,
-      "min": 3,
-      "avg": 3
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
+      "max": 2,
+      "min": 2,
+      "avg": null
     },
     {
       "name": "Selector::Simple array min",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
       "max": 1,
       "min": 1,
-      "avg": 1
+      "avg": null
     },
     {
       "name": "Selector::Simple array max",
-      "hits": 1,
-      "sum": 2,
-      "last": 2,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
       "max": 2,
       "min": 2,
-      "avg": 2
+      "avg": null
     },
     {
       "name": "Selector::Simple array sum",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
       "max": 1,
       "min": 1,
-      "avg": 1
+      "avg": null
     },
     {
       "name": "Selector::Simple array average",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
       "max": 1,
       "min": 1,
-      "avg": 1
+      "avg": null
     },
     {
       "name": "Selector::Simple at selector",
-      "hits": 1,
-      "sum": 2,
-      "last": 2,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
       "max": 2,
       "min": 2,
-      "avg": 2
+      "avg": null
     },
     {
       "name": "Selector::Simple count selector",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
       "max": 1,
       "min": 1,
-      "avg": 1
+      "avg": null
     },
     {
       "name": "Selector::Simple reverse selector",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
       "max": 1,
       "min": 1,
-      "avg": 1
+      "avg": null
     },
     {
       "name": "Selector::Sub-map group selector",
-      "hits": 1,
-      "sum": 149,
-      "last": 149,
-      "max": 149,
-      "min": 149,
-      "avg": 149
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "293"
+      },
+      "last": {
+        "v": "293"
+      },
+      "max": 293,
+      "min": 293,
+      "avg": null
     },
     {
       "name": "Selector::Sub-map group by selector",
-      "hits": 1,
-      "sum": 340,
-      "last": 340,
-      "max": 340,
-      "min": 340,
-      "avg": 340
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "481"
+      },
+      "last": {
+        "v": "481"
+      },
+      "max": 481,
+      "min": 481,
+      "avg": null
     },
     {
       "name": "Selector::Sub-map boolean group selector",
-      "hits": 1,
-      "sum": 437,
-      "last": 437,
-      "max": 437,
-      "min": 437,
-      "avg": 437
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "624"
+      },
+      "last": {
+        "v": "624"
+      },
+      "max": 624,
+      "min": 624,
+      "avg": null
     },
     {
       "name": "Selector::Sub-map selector",
-      "hits": 1,
-      "sum": 49,
-      "last": 49,
-      "max": 49,
-      "min": 49,
-      "avg": 49
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "50"
+      },
+      "last": {
+        "v": "50"
+      },
+      "max": 50,
+      "min": 50,
+      "avg": null
     },
     {
       "name": "Selector::Array selector",
-      "hits": 1,
-      "sum": 107,
-      "last": 107,
-      "max": 107,
-      "min": 107,
-      "avg": 107
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "128"
+      },
+      "last": {
+        "v": "128"
+      },
+      "max": 128,
+      "min": 128,
+      "avg": null
     },
     {
       "name": "Selector::Simple limit selector",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
-      "max": 1,
-      "min": 1,
-      "avg": 1
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
+      "max": 2,
+      "min": 2,
+      "avg": null
     },
     {
       "name": "Selector::All",
-      "hits": 1,
-      "sum": 13,
-      "last": 13,
-      "max": 13,
-      "min": 13,
-      "avg": 13
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "16"
+      },
+      "last": {
+        "v": "16"
+      },
+      "max": 16,
+      "min": 16,
+      "avg": null
     },
     {
       "name": "Selector::Last",
-      "hits": 1,
-      "sum": 12,
-      "last": 12,
-      "max": 12,
-      "min": 12,
-      "avg": 12
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "3"
+      },
+      "last": {
+        "v": "3"
+      },
+      "max": 3,
+      "min": 3,
+      "avg": null
     },
     {
       "name": "Selector::Assign",
-      "hits": 1,
-      "sum": 777,
-      "last": 777,
-      "max": 777,
-      "min": 777,
-      "avg": 777
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1566"
+      },
+      "last": {
+        "v": "1566"
+      },
+      "max": 1566,
+      "min": 1566,
+      "avg": null
     },
     {
       "name": "Selector::SkipTake",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
-      "max": 1,
-      "min": 1,
-      "avg": 1
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "18"
+      },
+      "last": {
+        "v": "18"
+      },
+      "max": 18,
+      "min": 18,
+      "avg": null
     },
     {
       "name": "Selector::Join",
-      "hits": 1,
-      "sum": 4,
-      "last": 4,
-      "max": 4,
-      "min": 4,
-      "avg": 4
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "31"
+      },
+      "last": {
+        "v": "31"
+      },
+      "max": 31,
+      "min": 31,
+      "avg": null
     },
     {
       "name": "Selector::Map conversion",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
-      "max": 1,
-      "min": 1,
-      "avg": 1
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
+      "max": 2,
+      "min": 2,
+      "avg": null
     },
     {
       "name": "Selector::CountBy",
-      "hits": 1,
-      "sum": 253,
-      "last": 253,
-      "max": 253,
-      "min": 253,
-      "avg": 253
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "459"
+      },
+      "last": {
+        "v": "459"
+      },
+      "max": 459,
+      "min": 459,
+      "avg": null
     },
     {
       "name": "Where::Sub-map group selector",
-      "hits": 1,
-      "sum": 66,
-      "last": 66,
-      "max": 66,
-      "min": 66,
-      "avg": 66
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "126"
+      },
+      "last": {
+        "v": "126"
+      },
+      "max": 126,
+      "min": 126,
+      "avg": null
     },
     {
       "name": "Where::Removed",
-      "hits": 1,
-      "sum": 12,
-      "last": 12,
-      "max": 12,
-      "min": 12,
-      "avg": 12
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
+      "max": 2,
+      "min": 2,
+      "avg": null
     },
     {
       "name": "Where::Main constraints",
-      "hits": 1,
-      "sum": 587,
-      "last": 587,
-      "max": 587,
-      "min": 587,
-      "avg": 587
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1528"
+      },
+      "last": {
+        "v": "1528"
+      },
+      "max": 1528,
+      "min": 1528,
+      "avg": null
     },
     {
       "name": "Where::Case",
-      "hits": 1,
-      "sum": 169,
-      "last": 169,
-      "max": 169,
-      "min": 169,
-      "avg": 169
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "381"
+      },
+      "last": {
+        "v": "381"
+      },
+      "max": 381,
+      "min": 381,
+      "avg": null
     },
     {
       "name": "Where::Dollar",
-      "hits": 1,
-      "sum": 2,
-      "last": 2,
-      "max": 2,
-      "min": 2,
-      "avg": 2
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "3"
+      },
+      "last": {
+        "v": "3"
+      },
+      "max": 3,
+      "min": 3,
+      "avg": null
     },
     {
       "name": "Where::Filter",
-      "hits": 1,
-      "sum": 10,
-      "last": 10,
-      "max": 10,
-      "min": 10,
-      "avg": 10
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "16"
+      },
+      "last": {
+        "v": "16"
+      },
+      "max": 16,
+      "min": 16,
+      "avg": null
     },
     {
       "name": "Where::toDate",
-      "hits": 1,
-      "sum": 12,
-      "last": 12,
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "12"
+      },
+      "last": {
+        "v": "12"
+      },
       "max": 12,
       "min": 12,
-      "avg": 12
+      "avg": null
     },
     {
       "name": "Sort::Sort by sub-maps",
-      "hits": 1,
-      "sum": 1878,
-      "last": 1878,
-      "max": 1878,
-      "min": 1878,
-      "avg": 1878
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2926"
+      },
+      "last": {
+        "v": "2926"
+      },
+      "max": 2926,
+      "min": 2926,
+      "avg": null
     },
     {
       "name": "Stream::Stream with limit",
-      "hits": 1,
-      "sum": 2,
-      "last": 2,
-      "max": 2,
-      "min": 2,
-      "avg": 2
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "9"
+      },
+      "last": {
+        "v": "9"
+      },
+      "max": 9,
+      "min": 9,
+      "avg": null
     },
     {
       "name": "Stream::Stream simple test",
-      "hits": 1,
-      "sum": 1,
-      "last": 1,
-      "max": 1,
-      "min": 1,
-      "avg": 1
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2"
+      },
+      "last": {
+        "v": "2"
+      },
+      "max": 2,
+      "min": 2,
+      "avg": null
     },
     {
       "name": "Query::Simple query 1",
-      "hits": 1,
-      "sum": 1934,
-      "last": 1934,
-      "max": 1934,
-      "min": 1934,
-      "avg": 1934
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "2874"
+      },
+      "last": {
+        "v": "2874"
+      },
+      "max": 2874,
+      "min": 2874,
+      "avg": null
     },
     {
       "name": "Query::Simple query 2",
-      "hits": 1,
-      "sum": 98,
-      "last": 98,
-      "max": 98,
-      "min": 98,
-      "avg": 98
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "112"
+      },
+      "last": {
+        "v": "112"
+      },
+      "max": 112,
+      "min": 112,
+      "avg": null
     }
   ]
 }
