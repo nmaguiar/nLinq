@@ -2,7 +2,7 @@
 //
 
 // Version: 0.1.4
-// Author : Nuno Aguiar
+// Copyright 2023 Nuno Aguiar
 
 var nLinq_USE_CASE = false;
 var nLinq = function(anObject, aK) {
@@ -946,7 +946,7 @@ var $from = nLinq;
 //
 
 // Version: 0.1.5
-// Author : Nuno Aguiar
+// Copyright 2023 Nuno Aguiar
 if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {
 	const _r = {
