@@ -1,5 +1,5 @@
 // Version: 0.1.4
-// Author : Nuno Aguiar
+// Copyright 2023 Nuno Aguiar
 
 var nLinq_USE_CASE = false;
 var nLinq = function(anObject, aK) {

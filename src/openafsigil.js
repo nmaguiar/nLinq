@@ -1,5 +1,5 @@
 // Version: 0.1.5
-// Author : Nuno Aguiar
+// Copyright 2023 Nuno Aguiar
 if (!(typeof isJavaObject == 'defined')) isJavaObject = () => false
 const $$ = function(aObj) {
 	const _r = {
