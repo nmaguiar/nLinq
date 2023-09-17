@@ -27,6 +27,7 @@ todo:
 - Selector::Join
 - Selector::Map conversion
 - Selector::CountBy
+- Selector::Groups
 
 - Where::Sub-map group selector
 - Where::Removed
@@ -80,8 +81,9 @@ jobs:
   args:
     quiet: true
   exec: |
-    tprint("Tests PASSED: {{pass}}/{{count}}", args.results);
-    tprint("Tests FAILED: {{fail}}/{{count}}", args.results);
+    tprint("Tests PASSED : {{pass}}/{{count}}", args.results);
+    tprint("Tests FAILED : {{fail}}/{{count}}", args.results);
+    tprint("Tests ASSERTS: {{asserts}}", args.results)
     if (args.results.fail > 0) printErr("There are failed tests");
     io.writeFileString("nlinq-test.md", ow.test.toMarkdown());
     io.writeFileJSON("nlinq-test.json", args.results);
@@ -287,6 +289,20 @@ jobs:
 
       ow.test.assert(res2.countBy("address.zip,address.city").length, 69, "Problem with countBy (3)")
       ow.test.assert(res2.equals("address.city", "Monroe").countBy("address.state,address.city")[0]._count, 4, "Problem with countBy (4)")
+
+# ----------------------
+- name: Selector::Groups
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      var res = $from(global.data).begin().equals('address.state', 'NY').contains('email', 'icloud').end().orBegin().equals('address.state', 'NJ').notContains('email', 'icloud').end().count()
+      ow.test.assert(res, 71, "Problem with groups (1)")
+
+      res = $from(global.data).begin().equals('address.state', 'NY').contains('email', 'icloud').end().orBegin().equals('address.state', 'NJ').notContains('email', 'icloud').count()
+      ow.test.assert(res, 71, "Problem with closing groups (1)")
 
 # --------------------------------
 - name: Selector::Sub-map selector

@@ -1,25 +1,11 @@
 {
-  "count": 36,
-  "pass": 36,
+  "count": 37,
+  "pass": 37,
   "fail": 0,
+  "asserts": 86,
   "profile": [
     {
       "name": "Selector::Simple result",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "1"
-      },
-      "last": {
-        "v": "1"
-      },
-      "max": 1,
-      "min": 1,
-      "avg": null
-    },
-    {
-      "name": "Selector::Simple result function",
       "hits": {
         "v": "1"
       },
@@ -31,6 +17,21 @@
       },
       "max": 0,
       "min": 0,
+      "avg": null
+    },
+    {
+      "name": "Selector::Simple result function",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "1"
+      },
+      "last": {
+        "v": "1"
+      },
+      "max": 1,
+      "min": 1,
       "avg": null
     },
     {
@@ -54,13 +55,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "3"
+        "v": "1"
       },
       "last": {
-        "v": "3"
+        "v": "1"
       },
-      "max": 3,
-      "min": 3,
+      "max": 1,
+      "min": 1,
       "avg": null
     },
     {
@@ -69,13 +70,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "2"
+        "v": "5"
       },
       "last": {
-        "v": "2"
+        "v": "5"
       },
-      "max": 2,
-      "min": 2,
+      "max": 5,
+      "min": 5,
       "avg": null
     },
     {
@@ -84,13 +85,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "2"
+        "v": "1"
       },
       "last": {
-        "v": "2"
+        "v": "1"
       },
-      "max": 2,
-      "min": 2,
+      "max": 1,
+      "min": 1,
       "avg": null
     },
     {
@@ -114,13 +115,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "1"
+        "v": "0"
       },
       "last": {
-        "v": "1"
+        "v": "0"
       },
-      "max": 1,
-      "min": 1,
+      "max": 0,
+      "min": 0,
       "avg": null
     },
     {
@@ -129,13 +130,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "2"
+        "v": "3"
       },
       "last": {
-        "v": "2"
+        "v": "3"
       },
-      "max": 2,
-      "min": 2,
+      "max": 3,
+      "min": 3,
       "avg": null
     },
     {
@@ -159,6 +160,96 @@
         "v": "1"
       },
       "sum": {
+        "v": "3"
+      },
+      "last": {
+        "v": "3"
+      },
+      "max": 3,
+      "min": 3,
+      "avg": null
+    },
+    {
+      "name": "Selector::Sub-map group selector",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "43"
+      },
+      "last": {
+        "v": "43"
+      },
+      "max": 43,
+      "min": 43,
+      "avg": null
+    },
+    {
+      "name": "Selector::Sub-map group by selector",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "92"
+      },
+      "last": {
+        "v": "92"
+      },
+      "max": 92,
+      "min": 92,
+      "avg": null
+    },
+    {
+      "name": "Selector::Sub-map boolean group selector",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "119"
+      },
+      "last": {
+        "v": "119"
+      },
+      "max": 119,
+      "min": 119,
+      "avg": null
+    },
+    {
+      "name": "Selector::Sub-map selector",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "12"
+      },
+      "last": {
+        "v": "12"
+      },
+      "max": 12,
+      "min": 12,
+      "avg": null
+    },
+    {
+      "name": "Selector::Array selector",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "23"
+      },
+      "last": {
+        "v": "23"
+      },
+      "max": 23,
+      "min": 23,
+      "avg": null
+    },
+    {
+      "name": "Selector::Simple limit selector",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
         "v": "1"
       },
       "last": {
@@ -169,108 +260,18 @@
       "avg": null
     },
     {
-      "name": "Selector::Sub-map group selector",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "239"
-      },
-      "last": {
-        "v": "239"
-      },
-      "max": 239,
-      "min": 239,
-      "avg": null
-    },
-    {
-      "name": "Selector::Sub-map group by selector",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "476"
-      },
-      "last": {
-        "v": "476"
-      },
-      "max": 476,
-      "min": 476,
-      "avg": null
-    },
-    {
-      "name": "Selector::Sub-map boolean group selector",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "684"
-      },
-      "last": {
-        "v": "684"
-      },
-      "max": 684,
-      "min": 684,
-      "avg": null
-    },
-    {
-      "name": "Selector::Sub-map selector",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "94"
-      },
-      "last": {
-        "v": "94"
-      },
-      "max": 94,
-      "min": 94,
-      "avg": null
-    },
-    {
-      "name": "Selector::Array selector",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "133"
-      },
-      "last": {
-        "v": "133"
-      },
-      "max": 133,
-      "min": 133,
-      "avg": null
-    },
-    {
-      "name": "Selector::Simple limit selector",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "2"
-      },
-      "last": {
-        "v": "2"
-      },
-      "max": 2,
-      "min": 2,
-      "avg": null
-    },
-    {
       "name": "Selector::All",
       "hits": {
         "v": "1"
       },
       "sum": {
-        "v": "21"
+        "v": "1"
       },
       "last": {
-        "v": "21"
+        "v": "1"
       },
-      "max": 21,
-      "min": 21,
+      "max": 1,
+      "min": 1,
       "avg": null
     },
     {
@@ -279,13 +280,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "14"
+        "v": "1"
       },
       "last": {
-        "v": "14"
+        "v": "1"
       },
-      "max": 14,
-      "min": 14,
+      "max": 1,
+      "min": 1,
       "avg": null
     },
     {
@@ -294,13 +295,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "1578"
+        "v": "321"
       },
       "last": {
-        "v": "1578"
+        "v": "321"
       },
-      "max": 1578,
-      "min": 1578,
+      "max": 321,
+      "min": 321,
       "avg": null
     },
     {
@@ -324,13 +325,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "11"
+        "v": "6"
       },
       "last": {
-        "v": "11"
+        "v": "6"
       },
-      "max": 11,
-      "min": 11,
+      "max": 6,
+      "min": 6,
       "avg": null
     },
     {
@@ -339,13 +340,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "2"
+        "v": "0"
       },
       "last": {
-        "v": "2"
+        "v": "0"
       },
-      "max": 2,
-      "min": 2,
+      "max": 0,
+      "min": 0,
       "avg": null
     },
     {
@@ -354,13 +355,28 @@
         "v": "1"
       },
       "sum": {
-        "v": "413"
+        "v": "88"
       },
       "last": {
-        "v": "413"
+        "v": "88"
       },
-      "max": 413,
-      "min": 413,
+      "max": 88,
+      "min": 88,
+      "avg": null
+    },
+    {
+      "name": "Selector::Groups",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "38"
+      },
+      "last": {
+        "v": "38"
+      },
+      "max": 38,
+      "min": 38,
       "avg": null
     },
     {
@@ -369,13 +385,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "81"
+        "v": "12"
       },
       "last": {
-        "v": "81"
+        "v": "12"
       },
-      "max": 81,
-      "min": 81,
+      "max": 12,
+      "min": 12,
       "avg": null
     },
     {
@@ -384,13 +400,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "10"
+        "v": "3"
       },
       "last": {
-        "v": "10"
+        "v": "3"
       },
-      "max": 10,
-      "min": 10,
+      "max": 3,
+      "min": 3,
       "avg": null
     },
     {
@@ -399,13 +415,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "1673"
+        "v": "340"
       },
       "last": {
-        "v": "1673"
+        "v": "340"
       },
-      "max": 1673,
-      "min": 1673,
+      "max": 340,
+      "min": 340,
       "avg": null
     },
     {
@@ -414,17 +430,47 @@
         "v": "1"
       },
       "sum": {
-        "v": "307"
+        "v": "56"
       },
       "last": {
-        "v": "307"
+        "v": "56"
       },
-      "max": 307,
-      "min": 307,
+      "max": 56,
+      "min": 56,
       "avg": null
     },
     {
       "name": "Where::Dollar",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "0"
+      },
+      "last": {
+        "v": "0"
+      },
+      "max": 0,
+      "min": 0,
+      "avg": null
+    },
+    {
+      "name": "Where::Filter",
+      "hits": {
+        "v": "1"
+      },
+      "sum": {
+        "v": "3"
+      },
+      "last": {
+        "v": "3"
+      },
+      "max": 3,
+      "min": 3,
+      "avg": null
+    },
+    {
+      "name": "Where::toDate",
       "hits": {
         "v": "1"
       },
@@ -439,48 +485,18 @@
       "avg": null
     },
     {
-      "name": "Where::Filter",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "27"
-      },
-      "last": {
-        "v": "27"
-      },
-      "max": 27,
-      "min": 27,
-      "avg": null
-    },
-    {
-      "name": "Where::toDate",
-      "hits": {
-        "v": "1"
-      },
-      "sum": {
-        "v": "6"
-      },
-      "last": {
-        "v": "6"
-      },
-      "max": 6,
-      "min": 6,
-      "avg": null
-    },
-    {
       "name": "Sort::Sort by sub-maps",
       "hits": {
         "v": "1"
       },
       "sum": {
-        "v": "2447"
+        "v": "645"
       },
       "last": {
-        "v": "2447"
+        "v": "645"
       },
-      "max": 2447,
-      "min": 2447,
+      "max": 645,
+      "min": 645,
       "avg": null
     },
     {
@@ -489,13 +505,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "6"
+        "v": "3"
       },
       "last": {
-        "v": "6"
+        "v": "3"
       },
-      "max": 6,
-      "min": 6,
+      "max": 3,
+      "min": 3,
       "avg": null
     },
     {
@@ -504,13 +520,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "2"
+        "v": "0"
       },
       "last": {
-        "v": "2"
+        "v": "0"
       },
-      "max": 2,
-      "min": 2,
+      "max": 0,
+      "min": 0,
       "avg": null
     },
     {
@@ -519,13 +535,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "2521"
+        "v": "736"
       },
       "last": {
-        "v": "2521"
+        "v": "736"
       },
-      "max": 2521,
-      "min": 2521,
+      "max": 736,
+      "min": 736,
       "avg": null
     },
     {
@@ -534,13 +550,13 @@
         "v": "1"
       },
       "sum": {
-        "v": "135"
+        "v": "23"
       },
       "last": {
-        "v": "135"
+        "v": "23"
       },
-      "max": 135,
-      "min": 135,
+      "max": 23,
+      "min": 23,
       "avg": null
     }
   ]
