@@ -23,7 +23,7 @@ $from( arrayOfContacts )
 
 Althought some code (OpenAFSigil) is borrowed from [OpenAF](https://github.com/openaf/openaf) it will be released for both in browser use and in OpenAF use.
 
-Check out the [nLinq reference](Reference.md).
+Check out the [nLinq reference](REFERENCE.md).
 
 ## Using in a browser
 
