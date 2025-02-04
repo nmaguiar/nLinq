@@ -36,7 +36,7 @@ jobs:
           dist: t8
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Bukld
       - name: Build
@@ -44,22 +44,22 @@ jobs:
           ojob build.yaml
           
       # Upload artifacts
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: nlinq.js
           path: dist/nlinq.js
           
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: nlinq.min.js
           path: dist/nlinq.min.js
       
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: openafnlinq.js
           path: dist/openafnlinq.js
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: nlinq-test.md
           path: nlinq-test.md
