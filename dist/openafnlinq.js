@@ -322,7 +322,7 @@ var nLinq = function(anObject, aK) {
         },
 
         andBegin: () => {
-            return this.begin()
+            return code.begin()
         },
 
         end  : () => {
