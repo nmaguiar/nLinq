@@ -25,20 +25,23 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Cache OpenAF runtime
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key : oaf-t8
           path: /tmp/oaf
           
+      - name: Setup OpenAF
+        uses: openaf/action-setup@v2
+        with:
+          dist: t8
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Donwload openaf
-      - name: Download openaf
-        uses: openaf/ojob-action@v3
-        with:
-          ojob: build.yaml
-          dist: t8
+      # Bukld
+      - name: Build
+        run : |
+          ojob build.yaml
           
       # Upload artifacts
       - uses: actions/upload-artifact@v2
@@ -62,7 +65,7 @@ jobs:
           path: nlinq-test.md
           
       - name: Push
-        uses: openaf/ojob-action@v3
+        uses: openaf/ojob-action@v7
         env :
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -70,7 +73,3 @@ jobs:
           args: 'message="update\ build" paths="dist/"'
           dist: t8
           
-      #- uses: stefanzweifel/git-auto-commit-action@v4
-      #  with:
-      #    commit_message   : github actions artifact upload
-      #    file_pattern     : dist/*.js
