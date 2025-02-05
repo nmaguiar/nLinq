@@ -693,6 +693,27 @@ var nLinq = function(anObject, aK) {
 
             return code;
         },
+        // Attach a new key to the result set based on a condition
+        //   aNewKey: the new key to be attached
+        //   aKey: the key to be compared
+        //   aValue: the value to be compared
+        //   aClass: the class value to be attached to aNewKey
+        attachBy: (aNewKey, aKey, aValue, aClass) => {
+            _$(aNewKey, "newkey").isString().$_()
+            _$(aKey, "key").isString().$_()
+            _$(aValue, "value").$_()
+            _$(aClass, "class").$_()
+
+            res = applyConditions(res)
+            res = res.map(r => {
+                if (aValue == $$(r).get(aKey)) {
+                    $$(r).set(aNewKey, aClass)
+                }   
+                return r
+            })
+
+            return code
+        },
         detach: aKey => {
             _$(aKey, "key").$_()
 

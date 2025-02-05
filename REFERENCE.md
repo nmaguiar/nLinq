@@ -187,6 +187,7 @@ var names = [
 | union | | |
 | cartesian | | |
 | attach | | |
+| attachBy | Attach a new key to the result set based on a condition | ```$from(data).attachBy("ord", "isFile", false, 1).attachBy("ord", "isFile", true, 2).sort("ord").select()``` |
 | sort | | |
 | assign | | |
 | join | | | 

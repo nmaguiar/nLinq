@@ -42,6 +42,7 @@ todo:
 - Intersect::Simple intersect
 - Except::Simple except
 - Cartesian::Simple cartesian
+- Attach::Attach by
 
 - Stream::Stream with limit
 - Stream::Stream simple test
@@ -65,7 +66,8 @@ jobs:
 - name: Load nLinq
   exec: |
     args.nlinq = _$(args.nlinq, "nlinq").default("../dist/openafnlinq.js");
-    loadLib(args.nlinq);
+    global.nLinq = __
+    load(args.nlinq)
 
 # ----------------------
 - name: Load sample data
@@ -96,7 +98,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data2).select();
+      var res = nLinq(global.data2).select();
       ow.test.assert(global.data2.length, res.length, "Problem with the simple result test.");
 
 # ---------------------------------------
@@ -107,7 +109,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data2).select(r => r);
+      var res = nLinq(global.data2).select(r => r);
       ow.test.assert(global.data2.length, res.length, "Problem with the simple function test.");
 
 # -------------------------------------------------
@@ -118,7 +120,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data2).select(r => {
+      var res = nLinq(global.data2).select(r => {
         if (r.isFile) return 1; else return 0;
       });
       ow.test.assert(global.data2.length, res.length, "Problem with the simple function transform test.");
@@ -131,7 +133,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data2).select({ isFile: false });
+      var res = nLinq(global.data2).select({ isFile: false });
       ow.test.assert(Object.keys(res[0]).length, 1, "Problem with the simple map test test.");
 
 # ---------------------------------
@@ -143,7 +145,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = $from(ar).min();
+      var res = nLinq(ar).min();
       ow.test.assert(res, 1, "Problem with simple array min.");
 
 # ---------------------------------
@@ -155,7 +157,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = $from(ar).max();
+      var res = nLinq(ar).max();
       ow.test.assert(res, 3, "Problem with simple array max.");
 
 # ---------------------------------
@@ -167,7 +169,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = $from(ar).sum();
+      var res = nLinq(ar).sum();
       ow.test.assert(res, 6, "Problem with simple array sum.");
 
 # -------------------------------------
@@ -179,7 +181,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      var res = $from(ar).average();
+      var res = nLinq(ar).average();
       ow.test.assert(res, 2, "Problem with simple array average.");
 
 # -----------------------------------
@@ -191,9 +193,9 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      ow.test.assert($from(ar).at(0), 1, "Problem with simple at selector (1)");
-      ow.test.assert($from(ar).at(1), 2, "Problem with simple at selector (2)");
-      ow.test.assert($from(ar).at(2), 3, "Problem with simple at selector (3)");
+      ow.test.assert(nLinq(ar).at(0), 1, "Problem with simple at selector (1)");
+      ow.test.assert(nLinq(ar).at(1), 2, "Problem with simple at selector (2)");
+      ow.test.assert(nLinq(ar).at(2), 3, "Problem with simple at selector (3)");
 
 # --------------------------------------
 - name: Selector::Simple count selector
@@ -204,7 +206,7 @@ jobs:
     func: |
       var ar = [1, 2, 3];
 
-      ow.test.assert($from(ar).count(), 3, "Problem with simple count selector");
+      ow.test.assert(nLinq(ar).count(), 3, "Problem with simple count selector");
 
 # -------------------------------------
 - name: Selector::Simple limit selector
@@ -215,10 +217,10 @@ jobs:
     func: |
       var ar = [1, 2, 3, 4, 5];
 
-      ow.test.assert($from(ar).limit(3).count(), 3, "Problem with simple limit selector (1)");
-      ow.test.assert($from(ar).limit(-2).count(), 2, "Problem with simple limit selector (2)");
-      ow.test.assert($from(ar).limit(-1).at(0), 5, "Problem with simple limit selector (3)");
-      ow.test.assert($from(ar).limit(1).at(0), 1, "Problem with simple limit selector (4)");
+      ow.test.assert(nLinq(ar).limit(3).count(), 3, "Problem with simple limit selector (1)");
+      ow.test.assert(nLinq(ar).limit(-2).count(), 2, "Problem with simple limit selector (2)");
+      ow.test.assert(nLinq(ar).limit(-1).at(0), 5, "Problem with simple limit selector (3)");
+      ow.test.assert(nLinq(ar).limit(1).at(0), 1, "Problem with simple limit selector (4)");
 
 # ----------------------------------------
 - name: Selector::Simple reverse selector
@@ -229,7 +231,7 @@ jobs:
     func: |    
       var ar = [1, 2, 3];
 
-      ow.test.assert($from(ar).reverse()[0], 3, "Problem with simple reverse selector");
+      ow.test.assert(nLinq(ar).reverse()[0], 3, "Problem with simple reverse selector");
 
 # ---------------------------------------
 - name: Selector::Sub-map group selector
@@ -239,7 +241,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).group("address.state");
+      var res = nLinq(global.data).group("address.state");
 
       ow.test.assert(res.NY.length, 98, "Problem with sub-map group selector (1)");
       ow.test.assert(res.VA.length, 33, "Problem with sub-map group selector (2)");
@@ -252,7 +254,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).groupBy("address.state,address.city")
+      var res = nLinq(global.data).groupBy("address.state,address.city")
 
       ow.test.assert(res.NY["Saratoga Springs"].length, 2, "Problem with sub-map group by selector (1)")
       ow.test.assert(res.VA.Richmond.length, 2, "Problem with sub-map group by selector (2)")
@@ -266,7 +268,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).equals("address.state", "NY").select(["state:address.state", "phone"])
+      var res = nLinq(global.data).equals("address.state", "NY").select(["state:address.state", "phone"])
 
       ow.test.assert(res.length, 98, "Problem with array selector (1)")
       ow.test.assert(isDef(res[0].state), true, "Problem with array selector (2)")
@@ -280,12 +282,12 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).countBy("address.state", "count", "state")
+      var res = nLinq(global.data).countBy("address.state", "count", "state")
 
-      ow.test.assert($from(res).equals("state", "NY").at(0).count, 98, "Problem with countBy (1)")
-      ow.test.assert($from(res).equals("state", "VA").at(0).count, 33, "Problem with countBy (2)")
+      ow.test.assert(nLinq(res).equals("state", "NY").at(0).count, 98, "Problem with countBy (1)")
+      ow.test.assert(nLinq(res).equals("state", "VA").at(0).count, 33, "Problem with countBy (2)")
 
-      var res2 = $from(global.data).equals("address.state", "NY")
+      var res2 = nLinq(global.data).equals("address.state", "NY")
 
       ow.test.assert(res2.countBy("address.zip,address.city").length, 69, "Problem with countBy (3)")
       ow.test.assert(res2.equals("address.city", "Monroe").countBy("address.state,address.city")[0]._count, 4, "Problem with countBy (4)")
@@ -298,10 +300,10 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).begin().equals('address.state', 'NY').contains('email', 'icloud').end().orBegin().equals('address.state', 'NJ').notContains('email', 'icloud').end().count()
+      var res = nLinq(global.data).begin().equals('address.state', 'NY').contains('email', 'icloud').end().orBegin().equals('address.state', 'NJ').notContains('email', 'icloud').end().count()
       ow.test.assert(res, 71, "Problem with groups (1)")
 
-      res = $from(global.data).begin().equals('address.state', 'NY').contains('email', 'icloud').end().orBegin().equals('address.state', 'NJ').notContains('email', 'icloud').count()
+      res = nLinq(global.data).begin().equals('address.state', 'NY').contains('email', 'icloud').end().orBegin().equals('address.state', 'NJ').notContains('email', 'icloud').count()
       ow.test.assert(res, 71, "Problem with closing groups (1)")
 
 # --------------------------------
@@ -312,7 +314,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).equals({
+      var res = nLinq(global.data).equals({
         address: {
           state: "NY"
         }
@@ -327,8 +329,8 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from( [1, 2, 3, 4, 5] ).greater(0).all(), true, "Problem with all (1)");
-      ow.test.assert($from( [1, 2, 3, 4, 5] ).less(0).all(), false, "Problem with all (2)");
+      ow.test.assert(nLinq( [1, 2, 3, 4, 5] ).greater(0).all(), true, "Problem with all (1)");
+      ow.test.assert(nLinq( [1, 2, 3, 4, 5] ).less(0).all(), false, "Problem with all (2)");
 
 # --------------------
 - name: Selector::Last
@@ -337,8 +339,8 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from( [1, 2, 3, 4, 5] ).greater(0).last(), 5, "Problem with last (1)");
-      ow.test.assert($from( [1, 2, 3, 4, 5] ).less(6).last(), 5, "Problem with last (2)");
+      ow.test.assert(nLinq( [1, 2, 3, 4, 5] ).greater(0).last(), 5, "Problem with last (1)");
+      ow.test.assert(nLinq( [1, 2, 3, 4, 5] ).less(6).last(), 5, "Problem with last (2)");
 
 # ----------------------
 - name: Selector::Assign
@@ -348,7 +350,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data)
+      var res = nLinq(global.data)
       .assign([{ state: "NY" }], "extra", "address.state", "state", { extra: { state: "" } })
       .first();
 
@@ -361,7 +363,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from([1,2,3,4,5]).skip(4).count(), 1, "Problem with skip.");
+      ow.test.assert(nLinq([1,2,3,4,5]).skip(4).count(), 1, "Problem with skip.");
 
 # --------------------
 - name: Selector::Take
@@ -370,7 +372,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from([1,2,3,4,5]).take(4).count(), 4, "Problem with take.");
+      ow.test.assert(nLinq([1,2,3,4,5]).take(4).count(), 4, "Problem with take.");
 
 # ------------------------
 - name: Selector::SkipTake
@@ -379,7 +381,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from([1,2,3,4,5]).skipTake(3, 2).select(), [4, 5], "Problem with skipTake.");
+      ow.test.assert(nLinq([1,2,3,4,5]).skipTake(3, 2).select(), [4, 5], "Problem with skipTake.");
 
 # --------------------
 - name: Selector::Join
@@ -388,7 +390,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from([{ id: 1, t: 1}, {id: 2, t: 2}, {id: 3, t: 1}, {id: 4, t: 2 }])
+      var res = nLinq([{ id: 1, t: 1}, {id: 2, t: 2}, {id: 3, t: 1}, {id: 4, t: 2 }])
       .join([{t: 1, type: "ACTIVE"}, { t: 2, type: "INACTIVE" }], "type", "t", "t")
       .select(r => { r.type = r.type[0].type; return r });
 
@@ -401,11 +403,11 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res1 = $from(global.data2).mselect(void 0, "filename")
+      var res1 = nLinq(global.data2).mselect(void 0, "filename")
       ow.test.assert(isMap(res1), true, "Problem with array to map conversion")
       
 
-      var res2 = $from(res1, "filename").select()
+      var res2 = nLinq(res1, "filename").select()
       ow.test.assert(isArray(res2), true, "Problem with map to array conversion")
 
 # -----------------------------
@@ -416,23 +418,23 @@ jobs:
   to  : oJob Test
   args:
     func: |
-        ow.test.assert( $from(global.data).starts("name", "Finnegan").count(), 1, "Problem with starts.");
-        ow.test.assert( $from(global.data).ends("name", "Taylor").count(), 1, "Problem with ends.");
-        ow.test.assert( $from(global.data).equals("email", "angeline.novak@icloud.com").count(), 1, "Problem with equals.");
-        ow.test.assert( $from(global.data).greater("address.zip", 11704).count(), 795, "Problem with greater.");
-        ow.test.assert( $from(global.data).less("address.zip", 11704).count(), 203, "Problem with less.");
-        ow.test.assert( $from(global.data).greaterEquals("address.zip", 11704).count(), 797, "Problem with greaterEquals.");
-        ow.test.assert( $from(global.data).lessEquals("address.zip", 11704).count(), 205, "Problem with lessEquals.");
-        ow.test.assert( $from(global.data).contains("email", "@icloud.com").count(), 74, "Problem with contains.");
-        ow.test.assert( $from(global.data).empty("address.zone").count(), 1000, "Problem with empty (1).");
-        ow.test.assert( $from(global.data).empty("address.zip").count(), 0, "Problem with empty (2).");
-        ow.test.assert( $from(global.data).match("email", "\@icloud\.com$").count(), 74, "Problem with match.");
-        ow.test.assert( $from(global.data).type("address.type", "string").count(), 0, "Problem with type (1).");
-        ow.test.assert( $from(global.data).type("address.address", "string").count(), 1000, "Problem with type (2).");
-        ow.test.assert( $from(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
-        ow.test.assert( $from(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
-        ow.test.assert( $from(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
-        ow.test.assert( $from(global.data.map(clone)).detach("isICloud").is("isICloud").count(), 0, "Problem with detach." )
+        ow.test.assert( nLinq(global.data).starts("name", "Finnegan").count(), 1, "Problem with starts.");
+        ow.test.assert( nLinq(global.data).ends("name", "Taylor").count(), 1, "Problem with ends.");
+        ow.test.assert( nLinq(global.data).equals("email", "angeline.novak@icloud.com").count(), 1, "Problem with equals.");
+        ow.test.assert( nLinq(global.data).greater("address.zip", 11704).count(), 795, "Problem with greater.");
+        ow.test.assert( nLinq(global.data).less("address.zip", 11704).count(), 203, "Problem with less.");
+        ow.test.assert( nLinq(global.data).greaterEquals("address.zip", 11704).count(), 797, "Problem with greaterEquals.");
+        ow.test.assert( nLinq(global.data).lessEquals("address.zip", 11704).count(), 205, "Problem with lessEquals.");
+        ow.test.assert( nLinq(global.data).contains("email", "@icloud.com").count(), 74, "Problem with contains.");
+        ow.test.assert( nLinq(global.data).empty("address.zone").count(), 1000, "Problem with empty (1).");
+        ow.test.assert( nLinq(global.data).empty("address.zip").count(), 0, "Problem with empty (2).");
+        ow.test.assert( nLinq(global.data).match("email", "\@icloud\.com$").count(), 74, "Problem with match.");
+        ow.test.assert( nLinq(global.data).type("address.type", "string").count(), 0, "Problem with type (1).");
+        ow.test.assert( nLinq(global.data).type("address.address", "string").count(), 1000, "Problem with type (2).");
+        ow.test.assert( nLinq(global.data).between("address.zip", 45780, 45781).count(), 0, "Problem with between (1).");
+        ow.test.assert( nLinq(global.data).betweenEquals("address.zip", 45780, 45781).count(), 1, "Problem with between (2).");
+        ow.test.assert( nLinq(global.data).attach("isICloud", r => r.email.endsWith("@icloud.com")).is("isICloud").count(), 74, "Problem with is.");
+        ow.test.assert( nLinq(global.data.map(clone)).detach("isICloud").is("isICloud").count(), 0, "Problem with detach." )
 
 # -------------------
 - name: Where::toDate
@@ -447,7 +449,7 @@ jobs:
       ar.push({ i: 2, d: 1168402138776 })
       ar.push({ i: 3, d: "2018-01-09" })
 
-      var r = $from(ar).toDate("d").sort("d").select()
+      var r = nLinq(ar).toDate("d").sort("d").select()
 
       ow.test.assert(r[0].i, 2, "Problem with toDate (1)")
       ow.test.assert(r[1].i, 1, "Problem with toDate (2)")
@@ -461,15 +463,15 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
+      ow.test.assert(nLinq([1,2,3,4,5]).greater(3).removed().select(), [1, 2, 3], "Problem with removed.");
 
 # -------------------
 - name: Where::Dollar
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from(["$$.g", "$$.s"]).equals("$$.g").count(), 1, "Problem with where equals dollar.");
-      ow.test.assert($from(["$$.g", "$$.s"]).match("\\\$\\\$.g").count(), 1, "Problem with where match dollar.")
+      ow.test.assert(nLinq(["$$.g", "$$.s"]).equals("$$.g").count(), 1, "Problem with where equals dollar.");
+      ow.test.assert(nLinq(["$$.g", "$$.s"]).match("\\\$\\\$.g").count(), 1, "Problem with where match dollar.")
 
 # -------------------
 - name: Where::Filter
@@ -477,17 +479,17 @@ jobs:
   args:
     func: |
       var dat1 = [{ x: 1, y: 1, a: 1 }, { x: 1, y: 2, a: 1}];
-      ow.test.assert($from(dat1).filter({x: 1, y: 1}).count(), 1, "Problem with filter of map to map (1)");
-      ow.test.assert($from(dat1).filter({x: 1, a: 1}).count(), 2, "Problem with filter of map to map (2)");
-      ow.test.assert($from(dat1).filter(r => r.y == 1).count(), 1, "Problem with filter of function");
+      ow.test.assert(nLinq(dat1).filter({x: 1, y: 1}).count(), 1, "Problem with filter of map to map (1)");
+      ow.test.assert(nLinq(dat1).filter({x: 1, a: 1}).count(), 2, "Problem with filter of map to map (2)");
+      ow.test.assert(nLinq(dat1).filter(r => r.y == 1).count(), 1, "Problem with filter of function");
 
       var dat2 = [ [1, 2], [1, 3]];
-      ow.test.assert($from(dat2).filter(1).count(), 2, "Problem with filter of array (1)"); 
-      ow.test.assert($from(dat2).filter(2).count(), 1, "Problem with filter of array (2)"); 
+      ow.test.assert(nLinq(dat2).filter(1).count(), 2, "Problem with filter of array (1)"); 
+      ow.test.assert(nLinq(dat2).filter(2).count(), 1, "Problem with filter of array (2)"); 
 
       var dat3 = [ 1, 1, 2, 3];
-      ow.test.assert($from(dat3).filter(1).count(), 2, "Problem with filter of value (1)");
-      ow.test.assert($from(dat3).filter(2).count(), 1, "Problem with filter of value (2)");
+      ow.test.assert(nLinq(dat3).filter(1).count(), 2, "Problem with filter of value (1)");
+      ow.test.assert(nLinq(dat3).filter(2).count(), 1, "Problem with filter of value (2)");
 
 # -----------------
 - name: Where::Case
@@ -497,14 +499,14 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      ow.test.assert($from(["abc", "ABC"]).equals("AbC").count(), 2, "Problem with case insensitive (1).");
-      ow.test.assert($from(["abc", "ABC"]).useCase(true).equals("AbC").count(), 0, "Problem with case sensitive (1).");
+      ow.test.assert(nLinq(["abc", "ABC"]).equals("AbC").count(), 2, "Problem with case insensitive (1).");
+      ow.test.assert(nLinq(["abc", "ABC"]).useCase(true).equals("AbC").count(), 0, "Problem with case sensitive (1).");
 
-      ow.test.assert($from(global.data).starts("name", "CArInA").count(), 1, "Problem with case insensitive (2).");
-      ow.test.assert($from(global.data).useCase(true).starts("name", "CArInA").count(), 0, "Problem with case sensitive (2).");
+      ow.test.assert(nLinq(global.data).starts("name", "CArInA").count(), 1, "Problem with case insensitive (2).");
+      ow.test.assert(nLinq(global.data).useCase(true).starts("name", "CArInA").count(), 0, "Problem with case sensitive (2).");
 
-      ow.test.assert($from(global.data).starts("address.state", "ny").any(), true, "Problem with case insensitive (3).");
-      ow.test.assert($from(global.data).useCase(true).starts("address.state", "ny").any(), false, "Problem with case sensitive (3).");
+      ow.test.assert(nLinq(global.data).starts("address.state", "ny").any(), true, "Problem with case insensitive (3).");
+      ow.test.assert(nLinq(global.data).useCase(true).starts("address.state", "ny").any(), false, "Problem with case sensitive (3).");
 
 # -----------------------------------
 - name: Where::Sub-map group selector
@@ -514,7 +516,7 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).ends("email", "yahoo.com").equals("address.zip", 7424);
+      var res = nLinq(global.data).ends("email", "yahoo.com").equals("address.zip", 7424);
 
       ow.test.assert(res.count(), 1, "Problem with sub-map query count.");
       ow.test.assert(res.first().phone, "2764614795", "Problem with sub-map query select.");
@@ -527,40 +529,59 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res = $from(global.data).sort("address.state", "-address.zip").first();
+      var res = nLinq(global.data).sort("address.state", "-address.zip").first();
 
       ow.test.assert(res.address.zip, 99654, "Problem with sort by sub-maps.");
+
+# -----------------------
+- name: Attach::Attach by
+  deps: 
+  - Load nLinq
+  to  : oJob Test
+  args:
+    func: |
+      var res = nLinq([{ id: 1, t: 1}, {id: 2, t: 2}, {id: 3, t: 1}, {id: 4, t: 2 }])
+                .attachBy("ord", "t", 1, 2)
+                .attachBy("ord", "t", 2, 1)
+                .sort("ord")
+                .select()
+
+      ow.test.assert(res.length, 4, "Problem with attach by (0)")
+      ow.test.assert(res[0].id, 2, "Problem with attach by (1)")
+      ow.test.assert(res[1].id, 4, "Problem with attach by (2)")
+      ow.test.assert(res[2].id, 1, "Problem with attach by (3)")
+      ow.test.assert(res[3].id, 3, "Problem with attach by (4)")
 
 # -----------------------
 - name: Join::Simple join
   deps: Load nLinq
   args:
     func: |
-      ow.test.assert($from([1,2,3]).join([4]).count(), 4, "Problem with simple join.");
+      ow.test.assert(nLinq([1,2,3]).join([4]).count(), 4, "Problem with simple join.");
 
 # -----------------------
 - name: Intersect::Simple intersect
   deps: Load nLinq
   args:
     func: |
-      ow.test.assert($from([1,2,3]).intersect([3,4]).count(), 1, "Problem with simple intersect.");
+      ow.test.assert(nLinq([1,2,3]).intersect([3,4]).count(), 1, "Problem with simple intersect.");
 
 # -----------------------
 - name: Except::Simple except
   deps: Load nLinq
   args:
     func: |
-      ow.test.assert($from([1,2,3]).except([3,4]).count(), 2, "Problem with simple except.");
+      ow.test.assert(nLinq([1,2,3]).except([3,4]).count(), 2, "Problem with simple except.");
 
 # ---------------------------------
 - name: Cartesian::Simple cartesian
   deps: Load nLinq
   args:
     func: |
-      ow.test.assert($from([1,2]).cartesian([3,4]).select(), [[1,3],[1,4],[2,3],[2,4]], "Problem with cartesian for numbers.");
-      ow.test.assert($from([1,2]).cartesian([true, false]).select(), [[1,true],[1,false],[2,true],[2,false]], "Problem with cartesian for booleans.");
-      ow.test.assert($from([1,2]).cartesian([{s: true}, {s: false}]).select(), [{s: true},{s: false},{s: true},{s: false}], "Problem with cartesian for maps.");
-      ow.test.assert($from([{n:1},{n:2}]).cartesian([{s: true},{s: false}]).select(), [{n: 1, s: true}, {n: 1, s: false}, {n: 2, s: true}, {n: 2, s: false}], "Problem with cartesian maps with maps.");
+      ow.test.assert(nLinq([1,2]).cartesian([3,4]).select(), [[1,3],[1,4],[2,3],[2,4]], "Problem with cartesian for numbers.");
+      ow.test.assert(nLinq([1,2]).cartesian([true, false]).select(), [[1,true],[1,false],[2,true],[2,false]], "Problem with cartesian for booleans.");
+      ow.test.assert(nLinq([1,2]).cartesian([{s: true}, {s: false}]).select(), [{s: true},{s: false},{s: true},{s: false}], "Problem with cartesian for maps.");
+      ow.test.assert(nLinq([{n:1},{n:2}]).cartesian([{s: true},{s: false}]).select(), [{n: 1, s: true}, {n: 1, s: false}, {n: 2, s: true}, {n: 2, s: false}], "Problem with cartesian maps with maps.");
 
 # ----------------------------------------------
 - name: Selector::Sub-map boolean group selector 
@@ -576,7 +597,7 @@ jobs:
         return t;
       });
 
-      var o = $from(res).group("test");
+      var o = nLinq(res).group("test");
 
       ow.test.assert(o["true"].length + o["false"].length, global.data.length, "Problem with boolean group selector.");
 
@@ -588,7 +609,7 @@ jobs:
   args:
     func: |
       var ar = [];
-      $from( Math.random ).limit(10).stream(r => ar.push(ar));
+      nLinq( Math.random ).limit(10).stream(r => ar.push(ar));
 
       ow.test.assert(ar.length, 10, "Problem with stream with limit.");
 
@@ -600,7 +621,7 @@ jobs:
   args:
     func: |
       var ar = [ 1, 2, 3, 4, 5], rs = [];
-      $from(() => { return ar.pop() }).stream(r => rs.push(r));
+      nLinq(() => { return ar.pop() }).stream(r => rs.push(r));
 
       ow.test.assert(rs.length, 5, "Problem with stream (1)");
       ow.test.assert(ar.length, 0, "Problem with stream (2)");
@@ -613,8 +634,8 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res1 = $from(global.data).sort("address.state", "-address.zip").first()
-      var res2 = $from(global.data).query({
+      var res1 = nLinq(global.data).sort("address.state", "-address.zip").first()
+      var res2 = nLinq(global.data).query({
         transform: [
           {
             func: "sort",
@@ -640,8 +661,8 @@ jobs:
   to  : oJob Test
   args:
     func: |
-      var res1 = $from(global.data).ends("email", "yahoo.com").equals("address.zip", 7424).count()
-      var res2 = $from(global.data).query({
+      var res1 = nLinq(global.data).ends("email", "yahoo.com").equals("address.zip", 7424).count()
+      var res2 = nLinq(global.data).query({
         where: [
           {
             cond: "ends",
