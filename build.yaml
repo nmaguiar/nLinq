@@ -10,12 +10,14 @@ todo:
 - Clean dist
 - Build browser version
 - Build OpenAF version
+- Build grammar
 - Test OpenAF version
 - Minimize
 
 ojob:
   opacks      :
   - openaf: 20200523
+  - PEG
   catch       : logErr(exception);
   logToConsole: true   # to change when finished
 
@@ -29,6 +31,14 @@ jobs:
     io.rm(args.dist);
     log("Recreating '" + args.dist + "'...");
     io.mkdir(args.dist);
+
+# -------------------
+- name: Build grammar
+  exec: |
+    loadLib("peg.js")
+    var peg = new PEG()
+    peg.loadGrammar(args.init.paths.src + "/../grammar/nlinq.pegjs")
+    io.writeFileString(args.init.paths.dist + "/nLinqParse.js", peg.generateCode())
 
 # ---------------------------
 - name: Build browser version
