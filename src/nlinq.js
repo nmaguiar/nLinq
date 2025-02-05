@@ -1,5 +1,5 @@
-// Version: 0.1.4
-// Copyright 2023 Nuno Aguiar
+// Version: 0.1.6
+// Copyright 2025 Nuno Aguiar
 
 var nLinq_USE_CASE = false;
 var nLinq = function(anObject, aK) {
@@ -693,7 +693,7 @@ var nLinq = function(anObject, aK) {
 
             return code;
         },
-        // Attach a new key to the result set based on a condition
+        // Attach a new key to the result set based on an equal condition
         //   aNewKey: the new key to be attached
         //   aKey: the key to be compared
         //   aValue: the value to be compared
@@ -709,6 +709,44 @@ var nLinq = function(anObject, aK) {
                 if (aValue == $$(r).get(aKey)) {
                     $$(r).set(aNewKey, aClass)
                 }   
+                return r
+            })
+
+            return code
+        },
+        // Attach a new key to the result set based on a negative equal condition
+        //   aNewKey: the new key to be attached
+        //   aKey: the key to be compared
+        //   aValue: the value to be compared
+        //   aClass: the class value to be attached to aNewKey
+        attachNotBy: (aNewKey, aKey, aValue, aClass) => {
+            _$(aNewKey, "newkey").isString().$_()
+            _$(aKey, "key").isString().$_()
+            _$(aValue, "value").$_()
+            _$(aClass, "class").$_()
+
+            res = applyConditions(res)
+            res = res.map(r => {
+                if (aValue != $$(r).get(aKey)) {
+                    $$(r).set(aNewKey, aClass)
+                }   
+                return r
+            })
+
+            return code
+        },
+        // Attach to an existing key the result set based on an empty condition
+        //   aNewKey: the key to check if empty
+        //   aClass: the class value to be attached to aNewKey
+        attachByEmpty: (aNewKey, aClass) => {
+            _$(aNewKey, "newkey").isString().$_()
+            _$(aClass, "class").$_()
+
+            res = applyConditions(res)
+            res = res.map(r => {
+                if ($$(r).get(aNewKey) == null || $$($$(r).get(aNewKey)).isUnDef()) {
+                    $$(r).set(aNewKey, aClass)
+                }
                 return r
             })
 

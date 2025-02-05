@@ -187,7 +187,9 @@ var names = [
 | union | | |
 | cartesian | | |
 | attach | | |
-| attachBy | Attach a new key to the result set based on a condition | ```$from(data).attachBy("ord", "isFile", false, 1).attachBy("ord", "isFile", true, 2).sort("ord").select()``` |
+| attachBy | Attach a new key a value set based on an equal condition | ```$from(data).attachBy("ord", "isFile", false, 1).attachBy("ord", "isFile", true, 2).sort("ord").select()``` |
+| attachNotBy | Attach a new key a value based on a negative equal condition | ```$from(data).attachNotBy("ord", "isFile", true, 1).attachNotBy("ord", "isFile", true, 2).sort("ord").select()``` |
+| attachByEmpty | Attach an existing key a value if empty | ```$from(data).attachNotBy("ord", "isFile", true, 1).attachByEmpty("ord", 2).sort("ord").select()``` |
 | sort | | |
 | assign | | |
 | join | | | 
