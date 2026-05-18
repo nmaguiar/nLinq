@@ -11,6 +11,27 @@ var result = $from( aSourceArray )      // FROM part
 
 Listed below, there are different combinations of WHERE and SELECT functions that you can use.
 
+## Table of Contents
+
+- [FROM](#from)
+- [WHERE](#where)
+  - [Logical Query Modifiers](#logical-query-modifiers)
+  - [Query Structure Modifiers](#query-structure-modifiers)
+  - [Restricting prefixes and suffixes](#restricting-prefixes-and-suffixes)
+  - [Restricting by equality](#restricting-by-equality)
+  - [Restricting by value](#restricting-by-value)
+  - [Restricting by value matching](#restricting-by-value-matching)
+  - [Restricting by value type](#restricting-by-value-type)
+  - [Function-based filtering](#function-based-filtering)
+  - [Changing the current result set](#changing-the-current-result-set)
+- [SELECT](#select)
+  - [Simple select](#simple-select)
+  - [Select the fields](#select-the-fields)
+  - [Select with field list](#select-with-field-list)
+  - [Transform function](#transform-function)
+  - [Select into a map of maps](#select-into-a-map-of-maps)
+- [QUERY](#query)
+
 ## FROM
 
 The input should be primarially an array. If a map is provided it will be converted into an array. For streams it can also be a function.
@@ -68,22 +89,13 @@ $from(fn).limit(5).stream(r => sum += r);
 
 These methods change how subsequent filtering conditions are combined with the preceding conditions.
 
-*   **`and()`**
-    *   Description: Sets the logical combiner for the *next* condition to AND. This is the default behavior if no other logical modifier is specified. Subsequent conditions are ANDed with the result of the previous conditions.
-    *   Example: ```var data = [ { item: "apple", color: "red" }, { item: "avocado", color: "green" } ]; $from(data).starts("item", "a").and().contains("item", "p").select() // Equivalent to .starts("item", "a").contains("item", "p") ``` _\[{ item: "apple", color: "red" }]_
-*   **`or()`**
-    *   Description: Sets the logical combiner for the *next* condition to OR with the accumulated result of all previous conditions.
-    *   Example: ```var data = [ { item: "apple", fresh: true }, { item: "banana", fresh: false }, { item: "carrot", fresh: true } ]; $from(data).equals("item", "banana").or().equals("fresh", true).select()``` _\[{ item: "apple", fresh: true }, { item: "banana", fresh: false }, { item: "carrot", fresh: true }]_
-*   **`not()`**
-    *   Description: Negates the result of the *next* condition. By default, it's combined with AND (effectively AND NOT). If explicitly preceded by `or()`, it becomes OR NOT.
-    *   Example (AND NOT): ```var data = [ { item: "apple", fresh: true }, { item: "banana", fresh: true } ]; $from(data).equals("fresh", true).not().equals("item", "apple").select()``` _\[{ item: "banana", fresh: true }]_
-    *   Example (OR NOT): ```var data = [ { item: "apple", count:10 }, { item: "banana", count:5 }, { item: "carrot", count:10 } ]; $from(data).equals("count", 5).or().not().equals("item", "apple").select()``` _\[ {item:"banana", count:5}, {item:"carrot", count:10} ]_
-*   **`andNot()`**
-    *   Description: Ensures the next condition is treated as AND NOT. This is a more explicit way of writing `and().not()`.
-    *   Example: ```var data = [ { item: "apple", fresh: true }, { item: "banana", fresh: true } ]; $from(data).equals("fresh", true).andNot().equals("item", "apple").select()``` _\[{ item: "banana", fresh: true }]_
-*   **`orNot()`**
-    *   Description: Ensures the next condition is treated as OR NOT. This is a more explicit way of writing `or().not()`.
-    *   Example: ```var data = [ { item: "apple", type:"fruit" }, { item: "banana", type:"fruit" }, {item:"carrot", type:"veg"} ]; $from(data).equals("item", "carrot").orNot().equals("type", "fruit").select()``` _\[{item:"carrot", type:"veg"}]_
+| Method | Description | Example |
+|--------|-------------|---------|
+| `and()` | Sets the logical combiner for the *next* condition to AND (default). Subsequent conditions are ANDed with the result of all previous conditions. | ```$from(data).starts("item","a").and().contains("item","p").select()``` _(equivalent to chaining without `and()`)_ |
+| `or()` | Sets the logical combiner for the *next* condition to OR with all previous conditions. | ```$from(data).equals("item","banana").or().equals("fresh",true).select()``` |
+| `not()` | Negates the result of the *next* condition. Combined with AND by default (AND NOT); use after `or()` for OR NOT. | AND NOT: ```$from(data).equals("fresh",true).not().equals("item","apple").select()``` <br> OR NOT: ```$from(data).equals("count",5).or().not().equals("item","apple").select()``` |
+| `andNot()` | Shorthand for `and().not()`. Ensures the next condition is AND NOT. | ```$from(data).equals("fresh",true).andNot().equals("item","apple").select()``` |
+| `orNot()` | Shorthand for `or().not()`. Ensures the next condition is OR NOT. | ```$from(data).equals("item","carrot").orNot().equals("type","fruit").select()``` |
 
 ### Query Structure Modifiers
 
@@ -124,11 +136,16 @@ var names = [
 | andNotEnds | Restricts string fields that are not suffixed by a value in addition to a previous restriction | ```$from(names).starts("first", "J").andNotEnds("last", "d").select()``` _[{"first":"James","last":"Scott"}]_ |
 | orEnds | Restricts string fields that are suffixed by a value in alternative to a previous restriction | ```$from(names).starts("first", "J").orEnds("first", "d").select()``` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"}]_ |
 | orNotEnds | Restricts string fields that are not suffixed by a value in alternative to a previous restriction | ```$from(names).starts("first", "J").orNotEnds("first", "s").select()``` _[{"first":"James","last":"Bond"},{"first":"James","last":"Scott"}]_ |
+
 ### Restricting by equality
 
 | Method | Description | Example |
 |------|-------------|---------|
-| andEquals | Restricts by a specific value of a field | ```$from(names).equals("firstName", "Scoot").andEquals("lastName", "Tiger").select()``` |
+| equals | Restricts to items where the field matches a specific value | ```$from(names).equals("lastName", "Smith").select()``` |
+| andEquals | Restricts by a specific value of a field (AND) | ```$from(names).equals("firstName", "James").andEquals("lastName", "Bond").select()``` |
+| notEquals | Restricts to items where the field does NOT match a specific value | ```$from(names).notEquals("lastName", "Smith").select()``` |
+| orEquals | Alternative restriction: items where the field matches a specific value (OR) | ```$from(names).equals("lastName", "Bond").orEquals("lastName", "Scott").select()``` |
+| orNotEquals | Alternative restriction: items where the field does NOT match a specific value (OR NOT) | ```$from(names).equals("lastName", "Bond").orNotEquals("firstName", "James").select()``` |
 | greaterEquals | Restricts by a field value greater than or equal to a specific value | ```$from(names).greaterEquals("age", 30).select()``` |
 | andGreaterEquals | Restricts by multiple field values greater than or equal to specific values | ```$from(names).greaterEquals("age", 30).andGreaterEquals("salary", 50000).select()``` |
 | notGreaterEquals | Restricts by a field value not greater than or equal to a specific value | ```$from(names).notGreaterEquals("age", 30).select()``` |
@@ -137,6 +154,7 @@ var names = [
 | orNotGreaterEquals | Restricts by either of the field values not being greater than or equal to specific values | ```$from(names).notGreaterEquals("age", 30).orNotGreaterEquals("salary", 50000).select()``` |
 | lessEquals | Restricts by a field value less than or equal to a specific value | ```$from(names).lessEquals("age", 30).select()``` |
 | andLessEquals | Restricts by multiple field values less than or equal to specific values | ```$from(names).lessEquals("age", 30).andLessEquals("salary", 50000).select()``` |
+| notLessEquals | Restricts by a field value not less than or equal to a specific value | ```$from(names).notLessEquals("age", 30).select()``` |
 | andNotLessEquals | Restricts by multiple field values not less than or equal to specific values | ```$from(names).notLessEquals("age", 30).andNotLessEquals("salary", 50000).select()``` |
 | orLessEquals | Restricts by either of the field values being less than or equal to specific values | ```$from(names).lessEquals("age", 30).orLessEquals("salary", 50000).select()``` |
 | orNotLessEquals | Restricts by either of the field values not being less than or equal to specific values | ```$from(names).notLessEquals("age", 30).orNotLessEquals("salary", 50000).select()``` |
@@ -203,6 +221,19 @@ var names = [
 | orIs | Alternative restriction: items where field `aKey` is truthy. | ```var data = [ { item: "apple", main:true, notes: "" }, { item: "banana", main:false, notes: "Sweet" } ]; $from(data).is("notes").orIs("main").select()``` _\[{ item: "apple", main:true, notes: "" }, { item: "banana", main:false, notes: "Sweet" }]_ |
 | orNotIs | Alternative restriction: items where field `aKey` is falsy. | ```var data = [ { item: "apple", code: "A", desc: null }, { item: "banana", code: "B", desc: "Fruit" } ]; $from(data).equals("code", "B").orNotIs("desc").select()``` _\[{ item: "apple", code: "A", desc: null }, { item: "banana", code: "B", desc: "Fruit" }]_ |
 
+### Function-based filtering
+
+These methods allow you to pass a custom function as the filter predicate instead of using key/value conditions.
+
+| Method | Description | Example |
+|------|-------------|---------|
+| `where(fn)` | Filters using a function `fn(element) => boolean`. Respects the current `or`/`not` modifiers — delegates to `andWhere`, `orWhere`, `andNotWhere`, or `orNotWhere` accordingly. | ```var d=[{n:"A",v:1},{n:"B",v:2}]; $from(d).where(r=>r.v>1).select()``` _\[{n:"B",v:2}]_ |
+| `andWhere(fn)` | Adds an AND restriction using a custom function. | ```var d=[{n:"A",v:1},{n:"B",v:2},{n:"C",v:3}]; $from(d).greater("v",1).andWhere(r=>r.n!="C").select()``` _\[{n:"B",v:2}]_ |
+| `orWhere(fn)` | Adds an OR restriction using a custom function. | ```var d=[{n:"A",v:1},{n:"B",v:2}]; $from(d).equals("n","A").orWhere(r=>r.v===2).select()``` _\[{n:"A",v:1},{n:"B",v:2}]_ |
+| `notWhere(fn)` | Adds a NOT restriction using a custom function. Respects the current `or` modifier. | ```var d=[{n:"A",v:1},{n:"B",v:2}]; $from(d).notWhere(r=>r.v>1).select()``` _\[{n:"A",v:1}]_ |
+| `andNotWhere(fn)` | Adds an AND NOT restriction using a custom function. | ```var d=[{n:"A",v:1},{n:"B",v:2},{n:"C",v:3}]; $from(d).greater("v",0).andNotWhere(r=>r.v>2).select()``` _\[{n:"A",v:1},{n:"B",v:2}]_ |
+| `orNotWhere(fn)` | Adds an OR NOT restriction using a custom function. | ```var d=[{n:"A",v:1},{n:"B",v:5}]; $from(d).equals("n","A").orNotWhere(r=>r.v<4).select()``` _\[{n:"A",v:1},{n:"B",v:5}]_ |
+
 ### Changing the current result set
 
 These methods operate on the current result set, often modifying it or preparing it for final selection. They typically return the `nLinq` object for chaining, unless specified otherwise.
@@ -240,6 +271,7 @@ These methods operate on the current result set, often modifying it or preparing
 |------|-------------|---------|
 | select | Returns all fields from the original array | ```$from(anArray).select()``` |
 | select (selected fields) | Returns specific fields with corresponding default values | ```$from(anArray).select({ f1: "n/a", f2: false })```
+| select (field list) | Returns only the listed fields; use `"field:alias"` to rename | ```$from(anArray).select(["name", "age:years"])``` |
 | select (transform function) | Returns the result of the transformation function | ```$from(anArray).select(r => ({ f1: r.f1, f2: r.a1 + r.a2 }))``` |
 | min | Returns the minimum value of a field from the result | ```$from(anArrayOfTemperatures).min("temperature")``` |
 | max | Returns the maximum value of a field from the result | ```$from(anArrayOfTemperatures).max("temperature")``` |
@@ -254,6 +286,7 @@ These methods operate on the current result set, often modifying it or preparing
 | averageBy | Groups by `aKey`, calculates average of `aField` in each group, stores in `aFnKey` (default: `_avg`). | ```var p=[{c:"F",v:1},{c:"F",v:3}]; $from(p).averageBy("c","v").select()``` _\[{c:"F",_avg:2}]_ |
 | sumBy | Groups by `aKey`, calculates sum of `aField` in each group, stores in `aFnKey` (default: `_sum`). | ```var p=[{c:"F",v:1},{c:"F",v:3}]; $from(p).sumBy("c","v").select()``` _\[{c:"F",_sum:4}]_ |
 | mselect | Selects fields (like `select(aParam)`) then transforms array to a map, using `aKey` field's values as keys. `dontRemove` (default true) keeps `aKey` in items. | ```var d=[{i:"a",v:1}]; $from(d).mselect(null,"i").select()``` _Output: {a:{i:"a",v:1}}_ |
+| apply | Executes a query map (same structure as `query`) and returns the result. Accepts `where`, `transform`, `select`, and `selector` keys. | ```$from(data).apply({ where:[{cond:"equals",args:["x",1]}], select:{x:0} })``` |
 | at | Returns a single entry of the result set. | ```$from(anArray).at(23)``` |
 | all | Returns true if all records from the original array are present on the final result set (false otherwise). | ```$from(anArray).all()``` |
 | count | Returns the number of records of the final result set | ```$from(anArray).count()``` |
@@ -291,6 +324,27 @@ var result = $from(inData).select({ x: 0, y: 0 });
 // [ { x: 1, y: -1 },
 //   { x: 5, y: -5 },
 //   { x: 3, y: 0  } ]
+```
+
+### Select with field list
+
+Pass an array of field names to `select()` to pick specific fields. Use `"field:alias"` syntax to rename a field in the output:
+
+```javascript
+var inData = [
+    { firstName: "James", lastName: "Bond", age: 40 },
+    { firstName: "Anne",  lastName: "Smith", age: 30 }
+];
+
+// Pick specific fields
+$from(inData).select(["firstName", "lastName"]);
+// [ { firstName: "James", lastName: "Bond" },
+//   { firstName: "Anne",  lastName: "Smith" } ]
+
+// Rename a field using "source:alias"
+$from(inData).select(["firstName:name", "age"]);
+// [ { name: "James", age: 40 },
+//   { name: "Anne",  age: 30 } ]
 ```
 
 ### Transform function
@@ -379,17 +433,35 @@ select:
 In the end this yaml could be provided as a JSON map to the query method like this:
 
 ```javascript
-aQueryMap = { where: [ { cond: "equals", args: [ "isFile", true ] } ], transform: [ { func: "attach", args: [ "lastAccess", elem => new Date(elem.lastAccess) }, { func: "sort", args: "-size" ], select: { filename: "n/a", size: -1 } }
+aQueryMap = {
+  where: [
+    { cond: "equals", args: [ "isFile", true ] }
+  ],
+  transform: [
+    { func: "attach", args: [ "lastAccess", elem => new Date(elem.lastAccess) ] },
+    { func: "sort",   args: [ "-size" ] }
+  ],
+  select: { filename: "n/a", size: -1 }
+}
 ```
 
 **Translation:**
-Will filter an array of map for the entries where the field _isFile_ is true, will add/replace the field _attach_ converting it into a javascript Date, then sort the resulting array by biggest values on the field _size_ (descending order) and returning an array of maps as a result with two fields: _filename_ and _size_. If _filename_ is not defined for some entry it will be represented as "n/a"; if size is not defined for some entry it will be represented as -1.
+Will filter an array of maps for the entries where the field _isFile_ is true, will add/replace the field _lastAccess_ converting it into a JavaScript Date, then sort the resulting array by biggest values on the field _size_ (descending order) and return an array of maps with two fields: _filename_ and _size_. If _filename_ is not defined for some entry it will be represented as "n/a"; if _size_ is not defined for some entry it will be represented as -1.
 
-Similary using a selector the JSON map to the query method would look like:
+Similarly, using a selector the JSON map to the query method would look like:
 
 ```javascript
-aQueryMap = { where: [ { cond: "equals", args: [ "isFile", true ] } ], transform: [ { func: "attach", args: [ "lastAccess", elem => new Date(elem.lastAccess) }, { func: "sort", args: "-size" ], selector: { func: "at", args: [ 0 ] } }
+aQueryMap = {
+  where: [
+    { cond: "equals", args: [ "isFile", true ] }
+  ],
+  transform: [
+    { func: "attach", args: [ "lastAccess", elem => new Date(elem.lastAccess) ] },
+    { func: "sort",   args: [ "-size" ] }
+  ],
+  selector: { func: "at", args: [ 0 ] }
+}
 ```
 
 **Translation:**
-Will filter an array of map for the entries where the field _isFile_ is true, will add/replace the field _attach_ converting it into a javascript Date, then sort the resulting array by biggest values on the field _size_ (descending order) and returning only the map, on position 0, of the resulting array of maps.
+Will filter an array of maps for the entries where the field _isFile_ is true, will add/replace the field _lastAccess_ converting it into a JavaScript Date, then sort the resulting array by biggest values on the field _size_ (descending order) and return only the map at position 0 of the resulting array of maps.
