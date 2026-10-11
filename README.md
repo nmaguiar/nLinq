@@ -75,3 +75,16 @@ This is not an exaustive list by just to provide a heads-up on what is still mis
 * Parameter arrays to apply functions over values.
 * Parameter on or, and, not, andNot & orNot.
 * Context key aware "where" methods. 
+
+## Optional OpenAF GPU reductions
+
+The OpenAF build provides per-query `.gpu(options)` opt-in for `sum()`, `average()`, `min()` and `max()` on numeric primitive arrays:
+
+```javascript
+loadLib("gpu.js"); ow.loadGPU();
+var metrics = {};
+var total = $from(values).greater(0).gpu({metrics: metrics}).sum();
+// Disable for this query with .gpu({useGPU:false}).
+```
+
+Requires the GPU opack collection adapter and a compatible OpenAF build. The browser build is unchanged and has no `.gpu()` method. Ordinary queries keep their existing behavior. Filters/projections execute once on CPU before the optional reduction. Keyed aggregates and unsupported inputs keep the existing implementation. The initial kernels support dense signed 32-bit integer arrays; sum/average additionally require `length * max(abs(value)) <= 2147483647`. Floating-point reductions stay on CPU to preserve JavaScript addition order. Empty results retain nLinq's existing return values. Useful repeated calls learn CPU/OpenCL/Metal costs; they are not guaranteed faster for short runs. `OAF_PFOREACH_GPU=false` disables delegation. `metrics.execution` reports the route used.
