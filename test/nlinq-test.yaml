@@ -50,6 +50,10 @@ todo:
 - Query::Simple query 1
 - Query::Simple query 2
 
+- Regression::Grouping
+- Regression::Filtered pagination
+- Regression::Set operations
+
 include:
 - oJobTest.yaml
 
@@ -684,3 +688,41 @@ jobs:
       })
 
       ow.test.assert(res1, res2, "Problem with simple query 2.")
+
+# -----------------------------
+- name: Regression::Grouping
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      require(args.test + "/query-regressions.js").testGrouping(nLinq, function(actual, expected, message) {
+        ow.test.assert(actual, expected, message)
+      })
+
+
+# -----------------------------
+- name: Regression::Filtered pagination
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      require(args.test + "/query-regressions.js").testPagination(nLinq, function(actual, expected, message) {
+        ow.test.assert(actual, expected, message)
+      })
+
+
+# -----------------------------
+- name: Regression::Set operations
+  deps:
+  - Load nLinq
+  - Load sample data
+  to  : oJob Test
+  args:
+    func: |
+      require(args.test + "/query-regressions.js").testSetOperations(nLinq, function(actual, expected, message) {
+        ow.test.assert(actual, expected, message)
+      })

@@ -76,6 +76,20 @@ This is not an exaustive list by just to provide a heads-up on what is still mis
 * Parameter on or, and, not, andNot & orNot.
 * Context key aware "where" methods. 
 
+## Development checks
+
+After building the distributions, run the OpenAF suite and the shared query
+regressions against both browser bundles:
+
+```sh
+ojob test/nlinq-test.yaml nlinq=dist/openafnlinq.js test=test
+node test/browser-regressions.cjs
+oaf -f test/gpu-test.js
+```
+
+The browser checks run the generated bundles without OpenAF globals. The GPU
+checks use a stub adapter and do not require GPU hardware.
+
 ## Optional OpenAF GPU reductions
 
 The OpenAF build provides per-query `.gpu(options)` opt-in for `sum()`, `average()`, `min()` and `max()` on numeric primitive arrays:
